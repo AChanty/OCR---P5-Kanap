@@ -135,7 +135,6 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                 let cartStorage = JSON.stringify(cartArray) // stocke les données du panier dans le localstorage
                 localStorage.setItem("cart", cartStorage)
 
-                localStorage.getItem("cart")
 
                 // let cartStorageLecture = localStorage.getItem("cart");
                 // let objJson = JSON.parse(cartStorageLecture);
