@@ -14,8 +14,10 @@ fetch("http://localhost:3000/api/products") // appelle l'API
 
             const { id, color, amount } = cartStorage[i]
 
-            ////
-            // faire correspondre le produit du panier au produit dans l'API
+
+            // -------------------------------------------------------------------
+            // -- Faire correspondre le produit du panier au produit dans l'API --
+            
             const myProduct = product.find((sofa) => { // fonction qui va vérifier dans la liste des produits si on a un id correspondant à l'id contenu dans le localstorage
                 return sofa._id === id
             })
@@ -26,9 +28,10 @@ fetch("http://localhost:3000/api/products") // appelle l'API
             }
 
             const { name, altTxt, imageUrl, price } = myProduct
-            ////
 
-            // mise en place de la structure HTML
+
+            // -------------------------------------------------------------------
+            // ---------------- Mise en place de la structure HTML ---------------
 
             // créer un élément article.cart__item dans le parent section#cart__items
             let sectionContainer = document.getElementById("cart__items")
@@ -102,7 +105,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
             productQuantityInput.setAttribute("value", amount)
 
             // modifie la valeur de "value" ( = la quantité de produits de cette couleur), si on change la quantité manuellement dans l'input
-            productQuantityInput.addEventListener("change", function() {
+            productQuantityInput.addEventListener("change", function () {
                 productQuantityInput.setAttribute("value", productQuantityInput.value)
             })
 
@@ -139,23 +142,49 @@ fetch("http://localhost:3000/api/products") // appelle l'API
         let totalPrice = document.getElementById("totalPrice")
         totalPrice.innerText = "42025"
 
+        // -------------------------------------------------------------------
+        // --------------------- Formulaire de commmande ---------------------
 
-        // affichage des messages d'erreur dans le formulaire
-        // if ()
         let firstNameErrorMsg = document.getElementById("firstNameErrorMsg")
-        firstNameErrorMsg.innerText = "test"
+        let firstNameInput = document.getElementById("firstName")
+        // message d'erreur si le champ contient un nombre (vérification avec le format regex) 
+        firstNameInput.addEventListener('input', function (e) {
+            let value = e.target.value
+            if (/[0-9]/.test(value)) {
+                firstNameErrorMsg.innerText = "Champ non valide"
+            } else {
+                firstNameErrorMsg.innerText = ""
+            }
+        })
 
         let lastNameErrorMsg = document.getElementById("lastNameErrorMsg")
-        lastNameErrorMsg.innerText = "test"
+        let lastNameInput = document.getElementById("lastName")
+        // message d'erreur si le champ contient un nombre (vérification avec le format regex) 
+        lastNameInput.addEventListener('input', function (e) {
+            let value = e.target.value
+            if (/[0-9]/.test(value)) {
+                lastNameErrorMsg.innerText = "Champ non valide"
+            } else {
+                lastNameErrorMsg.innerText = ""
+            }
+        })
 
-        let addressErrorMsg = document.getElementById("addressErrorMsg")
-        addressErrorMsg.innerText = "test"
+        // let addressErrorMsg = document.getElementById("addressErrorMsg")
 
-        let cityErrorMsg = document.getElementById("cityErrorMsg")
-        cityErrorMsg.innerText = "test"
+        // let cityErrorMsg = document.getElementById("cityErrorMsg")
 
         let emailErrorMsg = document.getElementById("emailErrorMsg")
-        emailErrorMsg.innerText = "test"
+        let emailInput = document.getElementById("email")
+        // message d'erreur si le champ ne contient ni "@" ni "."
+        emailInput.addEventListener('input', function (e) {
+            let value = e.target.value
+            if (!value.includes('@') || !value.includes('.')) {
+                emailErrorMsg.innerText = "Champ non valide"
+            } else {
+                emailErrorMsg.innerText = ""
+            }
+        })
+
 
 
 
