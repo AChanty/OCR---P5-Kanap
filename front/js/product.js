@@ -73,7 +73,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                 // console.log(parseInt(quantityChosen))
 
                 // fonction permettant de push l'article vers le panier et le localstorage
-                function insertNewItem() {
+                function pushNewItem() {
                     cartArray.push({ "id": id, "color": colorChosen, "amount": Number(quantityChosen) })
                 }
 
@@ -92,7 +92,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
 
                 } else if (!cartArray.includes(myProduct) && !cartArray.includes(colorChosen) && !cartArray.find(product => product.id === id)) { // si le produit et la couleur ne sont pas déjà présents dans le panier
                     quantityTotal += Number(quantityChosen)
-                    insertNewItem() 
+                    pushNewItem() 
                     console.log("1. ni le produit ni la couleur ne sont pas déjà présents dans le panier")
                     // cartArray.push(id, colorChosen, Number(quantityChosen))
                     // cartArray.push({"id": id, "color": colorChosen, "amount": Number(quantityChosen)})
@@ -105,7 +105,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
 
                 } else if (cartArray.find(product => product.id === id) && !cartArray.find(product => product.color === colorChosen)) { // si le produit est déjà présent mais pas la variation de couleur, on ajoute un nouvel array
                     // quantityTotal += Number(quantityChosen)
-                    insertNewItem() // = cartArray.push({"id": id, "color": colorChosen, "amount": Number(quantityChosen)})
+                    pushNewItem() // = cartArray.push({"id": id, "color": colorChosen, "amount": Number(quantityChosen)})
                     console.log("2. produit présent mais nouvelle couleur")
                     // console.log("// si le produit est déjà présent dans le panier")
 

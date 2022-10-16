@@ -17,7 +17,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
 
             // -------------------------------------------------------------------
             // -- Faire correspondre le produit du panier au produit dans l'API --
-            
+
             const myProduct = product.find((sofa) => { // fonction qui va vérifier dans la liste des produits si on a un id correspondant à l'id contenu dans le localstorage
                 return sofa._id === id
             })
@@ -145,36 +145,39 @@ fetch("http://localhost:3000/api/products") // appelle l'API
         // -------------------------------------------------------------------
         // --------------------- Formulaire de commmande ---------------------
 
-        let firstNameErrorMsg = document.getElementById("firstNameErrorMsg")
+
+        let contactArray = []
+
+        // function pushContactInfo() {
+        //     contactArray.push({ "first name": firstName, "last name": lastName, "address": address, "city": city, "email": emailInput.value })
+        // }
+
+        // fonction qui affiche un message d'erreur si l'input contient un nombre
+        function errorMsgContainsNumber(input, textSelector) {
+            input.addEventListener('input', function (e) {
+                let value = e.target.value
+                if (/[0-9]/.test(value)) {
+                    textSelector.innerText = "Champ non valide"
+                } else {
+                    textSelector.innerText = ""
+                }
+            })
+        }
+
         let firstNameInput = document.getElementById("firstName")
-        // message d'erreur si le champ contient un nombre (vérification avec le format regex) 
-        firstNameInput.addEventListener('input', function (e) {
-            let value = e.target.value
-            if (/[0-9]/.test(value)) {
-                firstNameErrorMsg.innerText = "Champ non valide"
-            } else {
-                firstNameErrorMsg.innerText = ""
-            }
-        })
+        let firstNameErrorMsg = document.getElementById("firstNameErrorMsg")
+        errorMsgContainsNumber(firstNameInput, firstNameErrorMsg)
 
-        let lastNameErrorMsg = document.getElementById("lastNameErrorMsg")
         let lastNameInput = document.getElementById("lastName")
-        // message d'erreur si le champ contient un nombre (vérification avec le format regex) 
-        lastNameInput.addEventListener('input', function (e) {
-            let value = e.target.value
-            if (/[0-9]/.test(value)) {
-                lastNameErrorMsg.innerText = "Champ non valide"
-            } else {
-                lastNameErrorMsg.innerText = ""
-            }
-        })
+        let lastNameErrorMsg = document.getElementById("lastNameErrorMsg")
+        errorMsgContainsNumber(lastNameInput, lastNameErrorMsg)
 
-        // let addressErrorMsg = document.getElementById("addressErrorMsg")
+        let addressInput = document.getElementById("address")
 
-        // let cityErrorMsg = document.getElementById("cityErrorMsg")
+        let cityInput = document.getElementById("city")
 
-        let emailErrorMsg = document.getElementById("emailErrorMsg")
         let emailInput = document.getElementById("email")
+        let emailErrorMsg = document.getElementById("emailErrorMsg")
         // message d'erreur si le champ ne contient ni "@" ni "."
         emailInput.addEventListener('input', function (e) {
             let value = e.target.value
@@ -183,10 +186,24 @@ fetch("http://localhost:3000/api/products") // appelle l'API
             } else {
                 emailErrorMsg.innerText = ""
             }
+        console.log(firstNameInput.value)
+
         })
 
+        let orderButton = document.getElementById("order")
+        orderButton.addEventListener('click', function () {
+            // fonction qui push les informations de contact dans le localstorage, si tous les champs sont remplis
+            function pushContactInfo() {
+                if (firstNameInput.value && lastNameInput.value && addressInput.value && cityInput.value && emailInput.value)
+                    contactArray.push({ "firstName": firstNameInput.value, "lastName": lastNameInput.value, "address": addressInput.value, "city": cityInput.value, "email": emailInput.value })
 
+                let contactStorage = JSON.stringify(contactArray)
+                localStorage.setItem("contact", contactStorage)
 
+            }
+            pushContactInfo()
+            console.log(contactArray)
+        })
 
 
     }) // fermeture fetch
