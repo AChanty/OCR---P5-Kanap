@@ -23,7 +23,6 @@ fetch("http://localhost:3000/api/products") // appelle l'API
             })
 
             if (myProduct) {
-                console.log("ok")
                 myProduct[i] = product
             }
 
@@ -104,10 +103,26 @@ fetch("http://localhost:3000/api/products") // appelle l'API
             productQuantityInput.setAttribute("max", 100)
             productQuantityInput.setAttribute("value", amount)
 
+            // fonction pour calculer le total des articles dans le panier
+            itemsCalculation()
+
             // modifie la valeur de "value" ( = la quantité de produits de cette couleur), si on change la quantité manuellement dans l'input
+            // puis recalcule le total d'articles dans le panier
             productQuantityInput.addEventListener("change", function () {
                 productQuantityInput.setAttribute("value", productQuantityInput.value)
+                itemsCalculation()
             })
+
+            // fonction qui calcule/recalcule le nombre d'articles total dans le panier
+            function itemsCalculation() {
+                let allInputs = document.getElementsByClassName("itemQuantity")
+                let total = 0
+                for (let i = 0; i < allInputs.length; i++) {
+                    total += parseInt(allInputs[i].value)
+                    console.log("mise à jour du nombre total d'articles dans le panier")
+                }
+                totalQuantity.innerText = parseInt(total)
+            }
 
 
             // créer un élément div.cart__item__content__settings__delete dans le parent div.cart__item__content__settings
@@ -124,6 +139,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
             // supprime l'article au clic du bouton "supprimer"
             contentSettingsDeleteItem.addEventListener('click', function () {
                 newArticle.remove() // supprime du DOM
+                itemsCalculation() // recalcule le total d'articles dans le panier
 
                 // removeLocalStorage() // supprime du localstorage
                 // console.log(cartStorage)
@@ -134,23 +150,28 @@ fetch("http://localhost:3000/api/products") // appelle l'API
         }
 
 
-        // affiche le nombre total d'articles
-        let totalQuantity = document.getElementById("totalQuantity")
-        totalQuantity.innerText = 50
-
         // affiche le prix total
         let totalPrice = document.getElementById("totalPrice")
-        totalPrice.innerText = "42025"
+        let allInputs = document.querySelectorAll(".cart__item__content__description p:last-child")
+        totalCalculation()
+
+        function totalCalculation() {
+            let total = 0
+            for (let i = 0; i < allInputs.length; i++) {
+                total += parseInt(allInputs[i])
+                console.log("mise à jour du calcul du total")
+            }
+            totalPrice.innerText = 65
+        }
+        // console.log(parseFloat(allInputs[0]) + parseFloat(allInputs[1]))
+        // console.log(parseFloat(allInputs))
+
 
         // -------------------------------------------------------------------
         // --------------------- Formulaire de commmande ---------------------
 
 
         let contactArray = []
-
-        // function pushContactInfo() {
-        //     contactArray.push({ "first name": firstName, "last name": lastName, "address": address, "city": city, "email": emailInput.value })
-        // }
 
         // fonction qui affiche un message d'erreur si l'input contient un nombre
         function errorMsgContainsNumber(input, textSelector) {
