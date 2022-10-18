@@ -110,7 +110,8 @@ fetch("http://localhost:3000/api/products") // appelle l'API
             // puis recalcule le total d'articles dans le panier
             productQuantityInput.addEventListener("change", function () {
                 productQuantityInput.setAttribute("value", productQuantityInput.value)
-                itemsCalculation()
+                itemsCalculation() // recalcule le nombre d'articles total
+                itemPriceCalculation() // recalcule le prix de l'article
             })
 
             // fonction qui calcule/recalcule le nombre d'articles total dans le panier
@@ -124,6 +125,10 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                 totalQuantity.innerText = parseInt(total)
             }
 
+            // fonction qui calcule/recalcule le prix de l'article (par couleur/id)
+            function itemPriceCalculation() {
+                productPrice.innerText = (price * productQuantityInput.value) + " €"
+            }
 
             // créer un élément div.cart__item__content__settings__delete dans le parent div.cart__item__content__settings
             let contentSettingsDelete = document.createElement('div')
@@ -161,7 +166,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                 total += parseInt(allInputs[i])
                 console.log("mise à jour du calcul du total")
             }
-            totalPrice.innerText = 65
+            totalPrice.innerText = parseInt(total)
         }
         // console.log(parseFloat(allInputs[0]) + parseFloat(allInputs[1]))
         // console.log(parseFloat(allInputs))
@@ -213,7 +218,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
 
         let orderButton = document.getElementById("order")
         orderButton.addEventListener('click', function () {
-            // fonction qui push les informations de contact dans le localstorage, si tous les champs sont remplis
+            // fonction qui push les informations de contact dans le localstorage, si tous les champs sont bien remplis
             function pushContactInfo() {
                 if (firstNameInput.value && lastNameInput.value && addressInput.value && cityInput.value && emailInput.value)
                     contactArray.push({ "firstName": firstNameInput.value, "lastName": lastNameInput.value, "address": addressInput.value, "city": cityInput.value, "email": emailInput.value })
@@ -225,6 +230,39 @@ fetch("http://localhost:3000/api/products") // appelle l'API
             pushContactInfo()
             console.log(contactArray)
         })
+
+
+
+
+        // let response = fetch('http://localhost:3000/api/order', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json;charset=utf-8'
+        //     },
+        //     body: JSON.stringify(contactArray)
+        //         // .stringify(cartStorage)
+        // })
+        // let result = response.json()
+        // alert(result.message)
+
+        // function send() {
+        //     fetch("http://localhost:3000/api/order", {
+        //         method: "POST",
+        //         headers: {
+        //             'Accept': 'application/json',
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify(cartStorage)
+        //     })
+        //         .then(function (res) {
+        //             if (res.ok) {
+        //                 console.log("post ok")
+        //                 return res.json();
+        //             }
+        //         })
+        // }
+        // send()
+          
 
 
     }) // fermeture fetch

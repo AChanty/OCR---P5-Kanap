@@ -127,6 +127,3 @@ fetch("http://localhost:3000/api/products") // appelle l'API
 
     }
     )
-
-
-    // test convertir localstorage lors du click > events > reconvertir
