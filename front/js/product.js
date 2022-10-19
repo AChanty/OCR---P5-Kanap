@@ -59,7 +59,8 @@ fetch("http://localhost:3000/api/products") // appelle l'API
             ////////////////////////////////////////////////////////////////
 
             // panier où sont stockés les articles via localstorage
-            let cartArray = []
+
+            let cartArray = localStorage.getItem("cart") !== null ? JSON.parse(localStorage.getItem("cart")) : []
 
             let addButton = document.getElementById('addToCart')
             let quantityTotal = 0

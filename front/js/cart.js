@@ -120,14 +120,15 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                 let total = 0
                 for (let i = 0; i < allInputs.length; i++) {
                     total += parseInt(allInputs[i].value)
-                    console.log("mise à jour du nombre total d'articles dans le panier")
                 }
+                console.log("mise à jour du nombre total d'articles dans le panier")
                 totalQuantity.innerText = parseInt(total)
             }
 
             // fonction qui calcule/recalcule le prix de l'article (par couleur/id)
             function itemPriceCalculation() {
                 productPrice.innerText = (price * productQuantityInput.value) + " €"
+
             }
 
             // créer un élément div.cart__item__content__settings__delete dans le parent div.cart__item__content__settings
@@ -164,8 +165,8 @@ fetch("http://localhost:3000/api/products") // appelle l'API
             let total = 0
             for (let i = 0; i < allInputs.length; i++) {
                 total += parseInt(allInputs[i])
-                console.log("mise à jour du calcul du total")
             }
+            console.log("mise à jour du calcul du total")
             totalPrice.innerText = parseInt(total)
         }
         // console.log(parseFloat(allInputs[0]) + parseFloat(allInputs[1]))
@@ -212,47 +213,146 @@ fetch("http://localhost:3000/api/products") // appelle l'API
             } else {
                 emailErrorMsg.innerText = ""
             }
-        console.log(firstNameInput.value)
-
         })
 
         let orderButton = document.getElementById("order")
-        orderButton.addEventListener('click', function () {
+        orderButton.addEventListener('click', function (e) {
+            e.preventDefault() // pour tests
             // fonction qui push les informations de contact dans le localstorage, si tous les champs sont bien remplis
-            function pushContactInfo() {
-                if (firstNameInput.value && lastNameInput.value && addressInput.value && cityInput.value && emailInput.value)
+            function sendToServer() {
+                if (firstNameInput.value && lastNameInput.value && addressInput.value && cityInput.value && emailInput.value) {
                     contactArray.push({ "firstName": firstNameInput.value, "lastName": lastNameInput.value, "address": addressInput.value, "city": cityInput.value, "email": emailInput.value })
 
-                let contactStorage = JSON.stringify(contactArray)
-                localStorage.setItem("contact", contactStorage)
 
-            }
-            pushContactInfo()
-            console.log(contactArray)
-        })
+                    let contactStorage = JSON.stringify(contactArray)
+                    localStorage.setItem("contact", contactStorage)
 
 
 
+                    let idList = []
+                    getIds()
+                    send()
 
-        // let response = fetch('http://localhost:3000/api/order', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json;charset=utf-8'
-        //     },
-        //     body: JSON.stringify(contactArray)
-        //         // .stringify(cartStorage)
-        // })
-        // let result = response.json()
-        // alert(result.message)
+                    // stocke les id depuis l'array cartStorage vers l'array idList
+                    function getIds() {
+                        // let idList = []
 
+                        for (i = 0; i < cartStorage.length; i++) {
+                            idList.push(cartStorage[i].id)
+                            console.log(idList)
+                        }
+
+                        let idListStorage = JSON.stringify(idList)
+                        localStorage.setItem("ids", idListStorage)
+                        let getIdList = localStorage.getItem("ids")
+                        let idStorage = JSON.parse(getIdList)
+                        // console.log("idlist array ? " + Array.isArray(idList))
+                    }
+
+                    // envoie les informations au serveur via la requête POST 
+                    function send() {
+
+                        const toSend = {
+                            // "contact": {
+                            //     "firstName": contactArray[0].firstName,
+                            //     "lastName": contactArray[0].lastName,
+                            //     "address": contactArray[0].address,
+                            //     "city": contactArray[0].city,
+                            //     "email": contactArray[0].email
+                            // },
+                            "contact": contactArray,
+                            "products": idList
+                        }
+                        fetch("http://localhost:3000/api/products/order", {
+                            method: "POST",
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(toSend)
+                        })
+                            .then(function (res) {
+                                if (res.ok) {
+                                    console.log("post ok")
+                                    return res.json();
+                                }
+                            })
+                    }
+
+                    // console.log(Array.isArray(contactArray))
+                    // console.log(Array.isArray(idList))
+
+
+
+                } else {
+                    alert("Veuillez remplir tous les champs du formulaire")
+                }
+            } // fin fonction sendToServer()
+
+            sendToServer()
+        }) // fin addEventListener
+
+
+
+        // getIds()
+
+        // function getIds() {
+        //     let idList = []
+
+        //     for (i = 0; i < cartStorage.length; i++)
+        //         idList.push(cartStorage[i].id)
+        //         console.log(cartStorage)
+        //         console.log(idList)
+        // }
+
+
+
+
+        // let cartArray = [];
+
+        // const PS5 = {
+        //     id: 37,
+        //     price: 400
+        // };
+
+        // const XBOX = {
+        //     id: 53,
+        //     price: 700
+        // };
+
+        // function addToCart(item, qty) {
+        //     // rajouter la condition faite avec la récupération du localstorage
+        //     let temp = [...cartArray];
+        //     temp.push({ ...item, qty: qty });
+        //     return temp;
+        // }
+
+        // let cartArray2 = addToCart(PS5, 3);
+
+        // console.log(cartArray2);
+        // console.log(cartArray);
+
+
+        // envoyer les informations au serveur via la requête POST
+        // à rajouter sur le clic au bouton
         // function send() {
-        //     fetch("http://localhost:3000/api/order", {
+        //     const monBody = {
+        //         "contact": {
+        //             "firstName": firstNameInput.value,
+        //             "lastName": "fdsfdfsd",
+        //             "address": "fdsfdsfdsfs",
+        //             "city": "dsfds",
+        //             "email": "test@test.com"
+        //         },
+        //         "products": ["415b7cacb65d43b2b5c1ff70f3393ad1"]
+        //     }
+        //     fetch("http://localhost:3000/api/products/order", {
         //         method: "POST",
         //         headers: {
         //             'Accept': 'application/json',
-        //             'Content-Type': 'application/json'
+        //             'Content-Type': 'application/json',
         //         },
-        //         body: JSON.stringify(cartStorage)
+        //         body: JSON.stringify(monBody)
         //     })
         //         .then(function (res) {
         //             if (res.ok) {
@@ -262,7 +362,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
         //         })
         // }
         // send()
-          
+
 
 
     }) // fermeture fetch
