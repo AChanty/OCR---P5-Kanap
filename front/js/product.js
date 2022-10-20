@@ -59,7 +59,6 @@ fetch("http://localhost:3000/api/products") // appelle l'API
             ////////////////////////////////////////////////////////////////
 
             // panier où sont stockés les articles via localstorage
-
             let cartArray = localStorage.getItem("cart") !== null ? JSON.parse(localStorage.getItem("cart")) : []
 
             let addButton = document.getElementById('addToCart')
@@ -112,7 +111,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
 
                     // } else if (cartArray.find( product => product.id === id)){
                 } else if (cartArray.find(product => product.id === id) && cartArray.find(product => product.color === colorChosen)) { // si le produit et la couleur sont déjà présents dans le panier, on ajoute la quantité à la couleur choisie
-                    const newAmount = cartArray.findIndex((obj => obj.color == colorChosen))
+                    const newAmount = cartArray.findIndex((obj => obj.id == id && obj.color == colorChosen))
                     cartArray[newAmount].amount += Number(quantityChosen)
                     console.log("3. produit et couleur déjà présents, actualisation du montant")
                 }

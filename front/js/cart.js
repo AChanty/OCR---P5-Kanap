@@ -123,12 +123,23 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                 }
                 console.log("mise à jour du nombre total d'articles dans le panier")
                 totalQuantity.innerText = parseInt(total)
+                amountCalculation()
+            }
+
+            // fonction qui calculre/recalcule le nombre d'articles par référence dans le localstorage
+            function amountCalculation() {
+                let cartArray = localStorage.getItem("cart") !== null ? JSON.parse(localStorage.getItem("cart")) : [] // récupère le localstorage ayant pour key "cart"
+                let newAmount = cartArray.findIndex((obj => obj.id == id && obj.color == color))
+                cartArray[newAmount].amount = productQuantityInput.value
+
+                let cartStorage = JSON.stringify(cartArray)
+                localStorage.setItem("cart", cartStorage)  // réassigne la key "cart" dans le localstorage avec les nouvelles valeurs
+                console.log("Mise à jour du montant de l'article dans le localstorage")
             }
 
             // fonction qui calcule/recalcule le prix de l'article (par couleur/id)
             function itemPriceCalculation() {
                 productPrice.innerText = (price * productQuantityInput.value) + " €"
-
             }
 
             // créer un élément div.cart__item__content__settings__delete dans le parent div.cart__item__content__settings
@@ -144,16 +155,25 @@ fetch("http://localhost:3000/api/products") // appelle l'API
 
             // supprime l'article au clic du bouton "supprimer"
             contentSettingsDeleteItem.addEventListener('click', function () {
-                newArticle.remove() // supprime du DOM
+                newArticle.remove() // supprime l'élément du DOM
                 itemsCalculation() // recalcule le total d'articles dans le panier
+                deleteArticle() //supprime l'article dans le localstorage
 
-                // removeLocalStorage() // supprime du localstorage
-                // console.log(cartStorage)
-                // function removeLocalStorage() {
-                //     localStorage.removeItem(id)
-                // }
+                // fonction qui supprime l'article dans le localstorage
+                function deleteArticle(index) {
+                    let cartArray = localStorage.getItem("cart") !== null ? JSON.parse(localStorage.getItem("cart")) : [] // récupère le localstorage ayant pour key "cart"
+                    let toDelete = cartArray.findIndex((obj => obj.id == id && obj.color == color)) // retourne le nombre correspondant à l'article à supprimer dans la key "cart" du localstorage
+                    index = toDelete
+                    // cartArray.splice(index, toDelete)
+                    cartArray.splice(toDelete, 1) // supprime 1 élément à partir de la valeur index de "toDelete"
+
+                    let cartStorage = JSON.stringify(cartArray)
+                    localStorage.setItem("cart", cartStorage) // réassigne la key "cart" dans le localstorage avec les nouvelles valeurs
+                    console.log("Suppresion de l'article")
+                }
             })
-        }
+
+        } // fin boucle for
 
 
         // affiche le prix total
