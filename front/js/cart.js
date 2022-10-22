@@ -151,10 +151,10 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                 //     cartArray[newAmount].amount = 100
                 //     alert("Trop d'articles de la même référence dans le panier (100 maximum)")
                 // } else {
-                    let cartStorage = JSON.stringify(cartArray)
-                    localStorage.setItem("cart", cartStorage)  // réassigne la key "cart" dans le localstorage avec les nouvelles valeurs
-                    console.log("Mise à jour du montant de l'article dans le localstorage")
-                }
+                let cartStorage = JSON.stringify(cartArray)
+                localStorage.setItem("cart", cartStorage)  // réassigne la key "cart" dans le localstorage avec les nouvelles valeurs
+                console.log("Mise à jour du montant de l'article dans le localstorage")
+            }
             // }
 
 
@@ -317,17 +317,29 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                             },
                             body: JSON.stringify(toSend)
                         })
+
+                            /////////////////////// {product-ID}
+                            // const data = fetch("http://localhost:3000/api/products/77711f0e466b4ddf953f677d30b0efc9")
+                            ///////////////////////
+
                             .then(function (res) {
                                 if (res.ok) {
                                     console.log("post ok")
                                     return res.json();
                                 }
                             })
-                    console.log(JSON.stringify(toSend))
-                    console.log(toSend.contact)
+                        console.log(JSON.stringify(toSend))
+                        console.log(toSend.contact)
 
-
+                        // .then (function (data) { // {product-ID}
+                        // fetch("http://localhost:3000/api/products/77711f0e466b4ddf953f677d30b0efc9")
+                        // document.location.href = `confirmation.html?orderId=${data.orderId}` // redirige vers la page de confirmation
+                        // })
                     }
+
+                    ///////////////////////
+
+                    ///////////////////////
 
                     // console.log(Array.isArray(contactArray))
                     // console.log(Array.isArray(idList))

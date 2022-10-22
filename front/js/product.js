@@ -7,7 +7,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
     .then(function (product) {
 
         const currenttUrl = window.location.href // récupère l'URL de la page actuelle
-        const url = new URL(currenttUrl);
+        const url = new URL(currenttUrl)
         const idUrl = url.searchParams.get("id") // récupère l'id dans l'URL actuel
 
         const myProduct = product.find((sofa) => { // fonction qui va vérifier dans la liste des produits si on a un id correspondant à l'id contenu dans l'url de la page
@@ -16,10 +16,6 @@ fetch("http://localhost:3000/api/products") // appelle l'API
 
         if (myProduct) { // donne des instructions lorsque l'url correspond bien à l'id du produit, pour bien faire correspondre les deux
             const { name, description, altTxt, imageUrl, _id: id, price, colors } = myProduct
-
-
-
-            // if (idUrl === id) { // donne des instructions lorsque l'url correspond bien à l'id du produit, pour bien faire correspondre les deux
 
             // créé un nouvel élément <img> dans la classe "item__img"'
             let imgContainer = document.querySelector(".item__img")
@@ -40,7 +36,6 @@ fetch("http://localhost:3000/api/products") // appelle l'API
             let itemPrice = document.getElementById('price')
             itemPrice.textContent = price
 
-
             insertOptions(colors)
             function insertOptions(colorList) { // insère les options de couleurs
                 let itemOptions = document.getElementById('colors')
@@ -53,13 +48,8 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                 }
             }
 
-            // }
-
-
-            ////////////////////////////////////////////////////////////////
-
             // panier où sont stockés les articles via localstorage
-            let cartArray = localStorage.getItem("cart") !== null ? JSON.parse(localStorage.getItem("cart")) : []
+            let cartArray = localStorage.getItem("cart") !== null ? JSON.parse(localStorage.getItem("cart")) : [] // récupère les informations de localstorage "cart" s'il en contient, sinon, créé un array "cartArray" vide
 
             let addButton = document.getElementById('addToCart')
             let quantityTotal = 0
@@ -70,9 +60,8 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                 let quantityChosen = quantity.value
                 let colorsList = document.getElementById('colors')
                 let colorChosen = colorsList.options[colorsList.selectedIndex].value // cible la couleur choisie parmi les options disponibles dans la balise HTML select.colors
-                // console.log(parseInt(quantityChosen))
 
-                // fonction permettant de push l'article vers le panier et le localstorage
+                // fonction permettant d'ajouter l'article dans le panier et le localstorage
                 function pushNewItem() {
                     cartArray.push({ "id": id, "color": colorChosen, "amount": Number(quantityChosen) })
                 }
@@ -80,58 +69,22 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                 if (colorChosen == false || quantityChosen == 0 || quantityChosen > 100) { // si une couleur ou un nombre d'article n'est pas indiqué, renvoie une alerte d'erreur
                     alert("Veuillez choisir une couleur et un nombre d'article valide à ajouter au panier")
 
-                    // } else if (cartArray.includes(myProduct)) { // si le produit est déjà présent dans le panier
-                    //     quantityTotal += Number(quantityChosen)
-                    //     console.log(parseInt(quantityTotal))
-                    //     console.log(quantityTotal)
-                    //     console.log("// si le produit est déjà présent dans le panier")
-
-                    // product.find((sofa) => { return sofa._id === idUrl })
-
-                    // !cartArray.find((product) => { return product.id === myProduct })
-
                 } else if (!cartArray.includes(myProduct) && !cartArray.includes(colorChosen) && !cartArray.find(product => product.id === id)) { // si le produit et la couleur ne sont pas déjà présents dans le panier
                     quantityTotal += Number(quantityChosen)
                     pushNewItem() 
                     console.log("1. ni le produit ni la couleur ne sont pas déjà présents dans le panier")
-                    // cartArray.push(id, colorChosen, Number(quantityChosen))
-                    // cartArray.push({"id": id, "color": colorChosen, "amount": Number(quantityChosen)})
-                    // = cartArray.push({"id": id, "color": colorChosen, "amount": Number(quantityChosen)})
-                    // newArray(id, colorChosen, quantityTotal)
-                    // cartArray.push(colorChosen)
-                    // cartArray.productId = id
-                    // cartArray.productColor = colorChosen
-                    // cartArray.productAmount = quantityChosen
 
                 } else if (cartArray.find(product => product.id === id) && !cartArray.find(product => product.color === colorChosen)) { // si le produit est déjà présent mais pas la variation de couleur, on ajoute un nouvel array
-                    // quantityTotal += Number(quantityChosen)
-                    pushNewItem() // = cartArray.push({"id": id, "color": colorChosen, "amount": Number(quantityChosen)})
+                    pushNewItem()
                     console.log("2. produit présent mais nouvelle couleur")
-                    // console.log("// si le produit est déjà présent dans le panier")
 
-                    // } else if (cartArray.find( product => product.id === id)){
                 } else if (cartArray.find(product => product.id === id) && cartArray.find(product => product.color === colorChosen)) { // si le produit et la couleur sont déjà présents dans le panier, on ajoute la quantité à la couleur choisie
-
-                    
-                    // const newAmount = cartArray.findIndex((obj => obj.id == id && obj.color == colorChosen))
-                    // let newValue = cartArray[newAmount].amount += Number(quantityChosen)
-
-                    // if (newValue > 100) { // fixe le nombre d'articles à 100 (le maximum souhaité) dans le localstorage si ce montant est dépassé, et affiche une alerte d'erreur
-                    //     cartArray[newAmount].amount = 100
-                    //     alert("Trop d'articles de la même référence dans le panier (100 maximum)")
-
-                    // } else {
-                    //     cartArray[newAmount].amount += Number(quantityChosen)
-                    //     console.log("3. produit et couleur déjà présents, actualisation du montant")
-                    // }
-                    
                     const newAmount = cartArray.findIndex((obj => obj.id == id && obj.color == colorChosen))
-                    cartArray[newAmount].amount += Number(quantityChosen)
+                    cartArray[newAmount].amount += Number(quantityChosen) // cible la propriété "amount" de l'article dane le localstorage et la met à jour
                     console.log("3. produit et couleur déjà présents, actualisation du montant")
                 }
 
-
-                // stocke les données du panier dans le localstorage en les convertissant en chaîne de caractères
+                // stocke les données du panier dans le localstorage en les convertissant en chaîne JSON
                 let cartStorage = JSON.stringify(cartArray)
                 localStorage.setItem("cart", cartStorage)
 
