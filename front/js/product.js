@@ -71,7 +71,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
 
                 } else if (!cartArray.includes(myProduct) && !cartArray.includes(colorChosen) && !cartArray.find(product => product.id === id)) { // si le produit et la couleur ne sont pas déjà présents dans le panier
                     quantityTotal += Number(quantityChosen)
-                    pushNewItem() 
+                    pushNewItem()
                     console.log("1. ni le produit ni la couleur ne sont pas déjà présents dans le panier")
 
                 } else if (cartArray.find(product => product.id === id) && !cartArray.find(product => product.color === colorChosen)) { // si le produit est déjà présent mais pas la variation de couleur, on ajoute un nouvel array

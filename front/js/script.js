@@ -9,7 +9,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
         // création d'une boucle qui va recréer le template HTML du canapé tant que la condition est valide (= longueur du tableau des produits), puis la boucle va
         // parcourir les infos du tableau pour les insérer dans les différentes valeurs [i]
         for (let i = 0; i < product.length; i++) {
-            
+
             const { name, description, altTxt, imageUrl, _id: id } = product[i]
 
             // créé un nouvel élément <a> dans la <section> #items
