@@ -77,8 +77,8 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                     cartArray.push({ "id": id, "color": colorChosen, "amount": Number(quantityChosen) })
                 }
 
-                if (colorChosen == false || quantityChosen == 0) { // si une couleur ou un nombre d'article n'est pas indiqué, renvoie une alerte d'erreur
-                    alert("Veuillez choisir une couleur et un nombre d'article à ajouter au panier")
+                if (colorChosen == false || quantityChosen == 0 || quantityChosen > 100) { // si une couleur ou un nombre d'article n'est pas indiqué, renvoie une alerte d'erreur
+                    alert("Veuillez choisir une couleur et un nombre d'article valide à ajouter au panier")
 
                     // } else if (cartArray.includes(myProduct)) { // si le produit est déjà présent dans le panier
                     //     quantityTotal += Number(quantityChosen)
@@ -111,10 +111,25 @@ fetch("http://localhost:3000/api/products") // appelle l'API
 
                     // } else if (cartArray.find( product => product.id === id)){
                 } else if (cartArray.find(product => product.id === id) && cartArray.find(product => product.color === colorChosen)) { // si le produit et la couleur sont déjà présents dans le panier, on ajoute la quantité à la couleur choisie
+
+                    
+                    // const newAmount = cartArray.findIndex((obj => obj.id == id && obj.color == colorChosen))
+                    // let newValue = cartArray[newAmount].amount += Number(quantityChosen)
+
+                    // if (newValue > 100) { // fixe le nombre d'articles à 100 (le maximum souhaité) dans le localstorage si ce montant est dépassé, et affiche une alerte d'erreur
+                    //     cartArray[newAmount].amount = 100
+                    //     alert("Trop d'articles de la même référence dans le panier (100 maximum)")
+
+                    // } else {
+                    //     cartArray[newAmount].amount += Number(quantityChosen)
+                    //     console.log("3. produit et couleur déjà présents, actualisation du montant")
+                    // }
+                    
                     const newAmount = cartArray.findIndex((obj => obj.id == id && obj.color == colorChosen))
                     cartArray[newAmount].amount += Number(quantityChosen)
                     console.log("3. produit et couleur déjà présents, actualisation du montant")
                 }
+
 
                 // stocke les données du panier dans le localstorage en les convertissant en chaîne de caractères
                 let cartStorage = JSON.stringify(cartArray)

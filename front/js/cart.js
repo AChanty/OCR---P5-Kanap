@@ -106,7 +106,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
             // fonction pour calculer le total des articles dans le panier
             itemsCalculation()
 
-            // modifie la valeur de "value" ( = la quantité de produits de cette couleur), si on change la quantité manuellement dans l'input
+            // modifie la valeur de "value" (= la quantité de produits de cette couleur), si on change la quantité manuellement dans l'input
             // puis recalcule le total d'articles dans le panier
             productQuantityInput.addEventListener("change", function () {
                 productQuantityInput.setAttribute("value", productQuantityInput.value)
@@ -124,7 +124,22 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                 console.log("mise à jour du nombre total d'articles dans le panier")
                 totalQuantity.innerText = parseInt(total)
                 amountCalculation()
+                // if (totalQuantity.innerText > 100) {
+                //     totalQuantity.innerText = 100
+                //     alert("Trop d'articles de la même référence dans le panier (100 maximum)")
+                // }
             }
+
+            // // fonction qui calculre/recalcule le nombre d'articles par référence dans le localstorage
+            // function amountCalculation() {
+            //     let cartArray = localStorage.getItem("cart") !== null ? JSON.parse(localStorage.getItem("cart")) : [] // récupère le localstorage ayant pour key "cart"
+            //     let newAmount = cartArray.findIndex((obj => obj.id == id && obj.color == color))
+            //     cartArray[newAmount].amount = productQuantityInput.value
+
+            //     let cartStorage = JSON.stringify(cartArray)
+            //     localStorage.setItem("cart", cartStorage)  // réassigne la key "cart" dans le localstorage avec les nouvelles valeurs
+            //     console.log("Mise à jour du montant de l'article dans le localstorage")
+            // }
 
             // fonction qui calculre/recalcule le nombre d'articles par référence dans le localstorage
             function amountCalculation() {
@@ -132,13 +147,23 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                 let newAmount = cartArray.findIndex((obj => obj.id == id && obj.color == color))
                 cartArray[newAmount].amount = productQuantityInput.value
 
-                let cartStorage = JSON.stringify(cartArray)
-                localStorage.setItem("cart", cartStorage)  // réassigne la key "cart" dans le localstorage avec les nouvelles valeurs
-                console.log("Mise à jour du montant de l'article dans le localstorage")
-            }
+                // if (productQuantityInput.value > 100) { // fixe le nombre d'articles à 100 (le maximum souhaité) dans le localstorage si ce montant est dépassé
+                //     cartArray[newAmount].amount = 100
+                //     alert("Trop d'articles de la même référence dans le panier (100 maximum)")
+                // } else {
+                    let cartStorage = JSON.stringify(cartArray)
+                    localStorage.setItem("cart", cartStorage)  // réassigne la key "cart" dans le localstorage avec les nouvelles valeurs
+                    console.log("Mise à jour du montant de l'article dans le localstorage")
+                }
+            // }
+
 
             // fonction qui calcule/recalcule le prix de l'article (par couleur/id)
             function itemPriceCalculation() {
+                // if (productQuantityInput.value > 100) { // fixe la valeur de l'input quantité à 100 (le maximum souhaité) si se montant est dépassé, et affiche une alerte d'erreur
+                //     productQuantityInput.value = 100
+                //     alert("Trop d'articles de la même référence dans le panier (100 maximum)")
+                // }
                 productPrice.innerText = (price * productQuantityInput.value) + " €"
             }
 
@@ -250,37 +275,38 @@ fetch("http://localhost:3000/api/products") // appelle l'API
 
 
                     let idList = []
-                    getIds()
-                    send()
+                    getIds() // stocke les id depuis l'array cartStorage vers l'array idList
+                    send() // envoie les informations au serveur via la requête POST 
 
                     // stocke les id depuis l'array cartStorage vers l'array idList
                     function getIds() {
-                        // let idList = []
 
                         for (i = 0; i < cartStorage.length; i++) {
                             idList.push(cartStorage[i].id)
-                            console.log(idList)
                         }
 
+                        // push l'array idList dans le localstorage en tant que key "product-ID"
                         let idListStorage = JSON.stringify(idList)
-                        localStorage.setItem("ids", idListStorage)
-                        let getIdList = localStorage.getItem("ids")
-                        let idStorage = JSON.parse(getIdList)
-                        // console.log("idlist array ? " + Array.isArray(idList))
+                        localStorage.setItem("products", idListStorage)
+                        console.log(idList)
+                        // let getIdList = localStorage.getItem("product-ID")
+                        // let idStorage = JSON.parse(getIdList)
                     }
 
                     // envoie les informations au serveur via la requête POST 
                     function send() {
 
+                        const { firstName, lastName, address, city, email } = contactArray[0]
+
                         const toSend = {
-                            // "contact": {
-                            //     "firstName": contactArray[0].firstName,
-                            //     "lastName": contactArray[0].lastName,
-                            //     "address": contactArray[0].address,
-                            //     "city": contactArray[0].city,
-                            //     "email": contactArray[0].email
-                            // },
-                            "contact": contactArray,
+                            "contact": {
+                                "firstName": firstName,
+                                "lastName": lastName,
+                                "address": address,
+                                "city": city,
+                                "email": email
+                            },
+                            // "contact": contactArray,
                             "products": idList
                         }
                         fetch("http://localhost:3000/api/products/order", {
@@ -297,6 +323,10 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                                     return res.json();
                                 }
                             })
+                    console.log(JSON.stringify(toSend))
+                    console.log(toSend.contact)
+
+
                     }
 
                     // console.log(Array.isArray(contactArray))
