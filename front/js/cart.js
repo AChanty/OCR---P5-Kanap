@@ -29,6 +29,8 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                 const { name, altTxt, imageUrl, price } = myProduct
 
 
+
+
                 // -------------------------------------------------------------------
                 // ---------------- Mise en place de la structure HTML ---------------
 
@@ -105,13 +107,163 @@ fetch("http://localhost:3000/api/products") // appelle l'API
 
                 // fonction pour calculer le total des articles dans le panier
                 cartItemsCalculation()
+                // let valueSelector = document.querySelectorAll('.itemQuantity')
+                // console.log("valeur " + amount * price)
+                // console.log(cartStorage[2].amount * price)
+                function totalCalculation() {
+                    let total = 0
+                    let cartArray = localStorage.getItem("cart") !== null ? JSON.parse(localStorage.getItem("cart")) : []
+                    let a = cartArray.findIndex((obj => obj.id == id && obj.color == color))
+                    // let test = []
+                    for (i = 0; i < cartStorage.length; i++) {
+                        total += price * cartStorage[i].amount
+                        console.log("total b = " + total)
+                    }
+                    // return total
+                    // fetch(`http://localhost:3000/api/products/${id}`)
+                    //     .then(res => res.json())
+                    //     .then(response => {
+                    //         dataProduct = response;
+                    //         // console.log(dataProduct)
+                    //         // let total = 0
+                    //         // let productQuantitySelector = document.querySelectorAll('.itemQuantity')
+                    //         console.log("prix = " + response.price)
+
+                    //         let cartArray = localStorage.getItem("cart") !== null ? JSON.parse(localStorage.getItem("cart")) : []
+
+                    //         let a = cartArray.findIndex((obj => obj.id == id && obj.color == color))
+                    //         console.log("amount = " + cartArray[a].amount)
+                    //         console.log("multiplication prix*amount = " + response.price * cartArray[a].amount)
+
+                    //         console.log("total a = " + total);
+
+                    //         // total += response.price * cartArray[a].amount
+                    //         total += price * cartArray[a].amount
+
+
+                    //         console.log("total b = " + total)
+
+                    //         // test.push(total)
+                    //         // console.log(test)
+
+                    //         // let totalPrice = document.getElementById("totalPrice")
+                    //         // totalPrice.innerText = total
+                    //         // return total
+                    //     })
+
+                    //     let total = 0
+
+                    // for (i = 0; i < cartStorage.length; i++) {
+                    //     let cartArray = localStorage.getItem("cart") !== null ? JSON.parse(localStorage.getItem("cart")) : []
+                    //     let a = cartArray.findIndex((obj => obj.id == id && obj.color == color))
+
+                    //     const myProduct = product.find((sofa) => { // fonction qui va vérifier dans la liste des produits si on a un id correspondant à l'id contenu dans le localstorage
+                    //         return sofa._id === id
+                    //     })
+        
+                    //     if (myProduct) {
+                    //         myProduct[i] = product
+                    //         console.log("ok")
+                    //     }
+        
+                    //     const { price } = myProduct
+                    //     total += cartArray[a].amount * price
+                    //     console.log("total c = " + total)
+
+                    // }
+            // }
+        }
+
+                // let totalPrice = document.getElementById("totalPrice")
+                // totalPrice.innerText = totalCalculation()
+
+                function totalCalculation2() {
+                    // //     let totalPrice = document.getElementById("totalPrice")
+                    // //     let total = 0
+                    // //     // for (let i = 0; i < allInputs.length; i++) { // parcourt les éléments contenant le prix de chaque article, puis additionne leur valeurs pour donner un total (dans la variable "total")
+                    // //     //     total += parseInt(allInputs[i])
+                    // //     // }
+                    // //     // console.log("Mise à jour du calcul du total")
+                    // //     // totalPrice.innerText = parseInt(total)
+
+                    // let productQuantitySelector = document.querySelectorAll('.itemQuantity')
+                    //     let valueSelector = document.querySelectorAll('.itemQuantity')
+                    let productPrice = document.querySelectorAll(".cart__item__content__description p:last-child")
+                    let total = 0
+                    productPrice.innerText = productPrice.innerText + "€"
+                    // for (i = 0; i < cartStorage.length; i++) {
+
+                    //     // total += cartStorage[i].amount * productPrice[i]
+                    //     total += parseInt(productPrice[i])
+                    //     // console.log("produit prix = " + Number(price[j]))
+                    //     console.log("amount " + cartStorage[i].amount)
+                    //     // console.log(myProduct[j].price)
+                    //     console.log("prix " + price)
+                    //     console.log(typeof (productPrice[i]))
+                    // }
+                    console.log("total = " + Number(total))
+
+                    // totalPrice.innerText = total
+                    // ligne 206, calcule seulement le dernier article
+
+                    // affiche le prix total
+                    // let totalPrice = document.getElementById("totalPrice")
+                    // let allInputs = document.querySelectorAll(".cart__item__content__description p:last-child")
+                    // totalCalculation()
+
+                    // fonction qui calcule le prix total du panier
+                    // function totalCalculation() {
+                    //     let total = 0
+                    //     // for (let i = 0; i < allInputs.length; i++) { // parcourt les éléments contenant le prix de chaque article, puis additionne leur valeurs pour donner un total (dans la variable "total")
+                    //     //     total += parseInt(allInputs[i])
+                    //     // }
+                    //     // console.log("Mise à jour du calcul du total")
+                    //     // totalPrice.innerText = parseInt(total)
+
+                    //     let productQuantitySelector = document.querySelectorAll('.itemQuantity')
+                    //     let productQuantitySelectorValue = productQuantitySelector.value
+
+                    //         for (i = 0; i < productQuantitySelector.length; i++) {
+                    //             total += price * productQuantitySelectorValue
+                    //         }
+
+                    // }
+
+
+
+                    // affiche le prix total
+                    // let totalPrice = document.getElementById("totalPrice")
+                    // let allInputs = document.querySelectorAll(".cart__item__content__description p:last-child")
+                    // totalCalculation()
+
+                    // fonction qui calcule le prix total du panier
+                    // function totalCalculation() {
+                    //     let total = 0
+                    //     // for (let i = 0; i < allInputs.length; i++) { // parcourt les éléments contenant le prix de chaque article, puis additionne leur valeurs pour donner un total (dans la variable "total")
+                    //     //     total += parseInt(allInputs[i])
+                    //     // }
+                    //     // console.log("Mise à jour du calcul du total")
+                    //     // totalPrice.innerText = parseInt(total)
+
+                    //     let productQuantitySelector = document.querySelectorAll('.itemQuantity')
+                    //     let productQuantitySelectorValue = productQuantitySelector.value
+
+                    //         for (i = 0; i < productQuantitySelector.length; i++) {
+                    //             total += price * productQuantitySelectorValue
+                    //         }
+
+                    // }
+                    // console.log(parseFloat(allInputs[0]) + parseFloat(allInputs[1]))
+                    // console.log(parseFloat(allInputs))
+                }
 
                 // modifie la valeur de "value" (= la quantité de produits de cette couleur), si on change la quantité manuellement dans l'input
                 // puis recalcule le total d'articles dans le panier
                 productQuantityInput.addEventListener("change", function () {
                     productQuantityInput.setAttribute("value", productQuantityInput.value)
                     cartItemsCalculation() // recalcule le nombre d'articles total
-                    itemPriceCalculation() // recalcule le prix de l'article
+                    itemPriceCalculation() // recalcule le prix de l'article (par rapport à la quantité)
+                    // totalCalculation()
                 })
 
                 // fonction qui calcule/recalcule le nombre d'articles total dans le panier
@@ -137,7 +289,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                     console.log("Mise à jour du montant de l'article dans le localstorage")
                 }
 
-                // fonction qui calcule/recalcule le prix de l'article (par couleur/id)
+                // fonction qui calcule/recalcule le prix de l'article (par référence unique id/couleur)
                 function itemPriceCalculation() {
                     productPrice.innerText = (price * productQuantityInput.value) + " €"
                 }
@@ -158,6 +310,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                     newArticle.remove() // supprime l'élément du DOM
                     cartItemsCalculation() // recalcule le total d'articles dans le panier
                     deleteArticle() //supprime l'article dans le localstorage
+                    // totalCalculation()
 
                     // fonction qui supprime l'article dans le localstorage
                     function deleteArticle(index) {
@@ -174,26 +327,11 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                 })
 
             } // fin boucle for
-            
+
         else { // affiche 0 dans le total d'articles si le panier est vide
             totalQuantity.innerText = 0
         }
-
-        // affiche le prix total
-        let totalPrice = document.getElementById("totalPrice")
-        let allInputs = document.querySelectorAll(".cart__item__content__description p:last-child")
-        totalCalculation()
-
-        function totalCalculation() {
-            let total = 0
-            for (let i = 0; i < allInputs.length; i++) { // parcourt les éléments contenant le prix de chaque article, puis additionne leur valeurs pour donner un total (dans la variable "total")
-                total += parseInt(allInputs[i])
-            }
-            console.log("mise à jour du calcul du total")
-            totalPrice.innerText = parseInt(total)
-        }
-        // console.log(parseFloat(allInputs[0]) + parseFloat(allInputs[1]))
-        // console.log(parseFloat(allInputs))
+        // totalCalculation()
 
 
         // -------------------------------------------------------------------
@@ -281,7 +419,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                     }
 
                     // envoie les informations au serveur via la requête POST 
-                    function send() {
+                    async function send() {
                         const { firstName, lastName, address, city, email } = contactArray[0]
 
                         const toSend = {
@@ -294,7 +432,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                             },
                             "products": idList // envoie le tableau des produits
                         }
-                        fetch("http://localhost:3000/api/products/order", {
+                        await fetch("http://localhost:3000/api/products/order", {
                             method: "POST",
                             headers: {
                                 'Accept': 'application/json',
@@ -303,31 +441,24 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                             body: JSON.stringify(toSend)
                         })
 
-                            /////////////////////// {product-ID}
-                            // const data = fetch("http://localhost:3000/api/products/77711f0e466b4ddf953f677d30b0efc9")
-                            ///////////////////////
-
                             .then(function (res) {
                                 if (res.ok) {
                                     console.log("post ok")
                                     // localStorage.removeItem('products')
                                     // window.localStorage.clear() // vide le localstorage une fois la commande envoyée
+                                    console.log(res.json())
+                                    // return res.json()
+                                    // res => res.json()
+                                    // console.log(res)
+                                    // // console.log(res.url)
+                                    // console.log(res.orderId)
+                                    // console.log(Object.orderId)
 
-
-                                    return res.json();
                                 }
                             })
-                        console.log(JSON.stringify(toSend))
-                        console.log(toSend.contact)
-
-                        // .then (function (data) { // {product-ID}
-                        // fetch("http://localhost:3000/api/products/77711f0e466b4ddf953f677d30b0efc9")
-                        // document.location.href = `confirmation.html?orderId=${data.orderId}` // redirige vers la page de confirmation
-                        // })
+                            // .then (console.log(send()))
+                            // 1e509f30-5307-11ed-9080-61f67474f16c
                     }
-
-                    // console.log(Array.isArray(contactArray))
-                    // console.log(Array.isArray(idList))
 
                 }
                 else {
@@ -337,5 +468,6 @@ fetch("http://localhost:3000/api/products") // appelle l'API
 
             sendToServer()
         }) // fin addEventListener
-
+    
     }) // fermeture fetch
+    
