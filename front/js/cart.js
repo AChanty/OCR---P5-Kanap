@@ -2,6 +2,9 @@
 let cartStorageLecture = localStorage.getItem("cart")
 let cartStorage = JSON.parse(cartStorageLecture)
 
+getIds()
+
+
 fetch("http://localhost:3000/api/products") // appelle l'API
     .then(function (response) {
         if (response.ok) {
@@ -11,9 +14,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
     .then(function (product) {
         if (cartStorage !== null)
             for (i = 0; i < cartStorage.length; i++) { // effectue une boucle pour chaque article différent dans le panier en localStorage
-
                 const { id, color, amount } = cartStorage[i]
-
 
                 // -------------------------------------------------------------------
                 // -- Faire correspondre le produit du panier au produit dans l'API --
@@ -30,145 +31,12 @@ fetch("http://localhost:3000/api/products") // appelle l'API
 
                 displayProduct(id, name, color, price, amount, imageUrl, altTxt) // met en place la structure HTML
                 cartItemsCalculation() // calcule le total d'articles dans le panier
-
-
-            } // fin boucle for
-
+            }
 
         else { // affiche 0 dans le total d'articles si le panier est vide
             totalQuantity.innerText = 0
         }
-
-
-        // // -------------------------------------------------------------------
-        // // --------------------- Formulaire de commmande ---------------------
-
-        // let contactArray = []
-
-        // // fonction qui affiche un message d'erreur si l'input contient un nombre
-        // function errorMsgContainsNumber(input, textSelector) {
-        //     input.addEventListener('input', function (e) {
-        //         let value = e.target.value
-        //         if (/[0-9]/.test(value)) {
-        //             textSelector.innerText = "Champ non valide"
-        //         } else {
-        //             textSelector.innerText = ""
-        //         }
-        //     })
-        // }
-
-        // let firstNameInput = document.getElementById("firstName")
-        // let firstNameErrorMsg = document.getElementById("firstNameErrorMsg")
-        // errorMsgContainsNumber(firstNameInput, firstNameErrorMsg)
-
-        // let lastNameInput = document.getElementById("lastName")
-        // let lastNameErrorMsg = document.getElementById("lastNameErrorMsg")
-        // errorMsgContainsNumber(lastNameInput, lastNameErrorMsg)
-
-        // let addressInput = document.getElementById("address")
-
-        // let cityInput = document.getElementById("city")
-
-        // let emailInput = document.getElementById("email")
-        // let emailErrorMsg = document.getElementById("emailErrorMsg")
-
-        // // message d'erreur si le champ email ne contient ni "@" ni "."
-        // emailInput.addEventListener('input', function (e) {
-        //     let value = e.target.value
-        //     if (!value.includes('@') || !value.includes('.')) {
-        //         emailErrorMsg.innerText = "Champ non valide"
-        //     } else {
-        //         emailErrorMsg.innerText = ""
-        //     }
-        // })
-
-        // -------------------------------------------------------------------
-
-        // let orderButton = document.getElementById("order")
-        // orderButton.addEventListener('click', function (e) {
-        //     e.preventDefault() // commenter/décommenter pour empêcher l'action du bouton, afin d'effectuer les tests
-
-        //     // fonction qui push les informations de contact dans le localstorage, si tous les champs sont bien remplis
-        //     function sendToServer() {
-
-        //         if (cartStorage.length == 0) {
-        //             alert("Votre panier est vide")
-        //             console.log("Le panier est vide")
-        //         }
-
-        //         else if (firstNameInput.value && lastNameInput.value && addressInput.value && cityInput.value && emailInput.value) { // vérifie que tous les champs sont remplis
-        //             contactArray.push({ "firstName": firstNameInput.value, "lastName": lastNameInput.value, "address": addressInput.value, "city": cityInput.value, "email": emailInput.value })
-
-        //             let contactStorage = JSON.stringify(contactArray)
-        //             localStorage.setItem("contact", contactStorage)
-
-        //             let idList = []
-
-        //             getIds() // stocke les id depuis l'array cartStorage vers l'array idList
-        //             send() // envoie les informations au serveur via la requête POST 
-
-        //             // stocke les id depuis l'array cartStorage vers l'array idList, afin d'isoler cette donnée en particulier
-        //             function getIds() {
-
-        //                 for (i = 0; i < cartStorage.length; i++) { // parcourt chaque article du cartStorage (key "cart" du localstorage), puis récupère/push l'élément "id" de chaque article dans l'array idList
-        //                     idList.push(cartStorage[i].id)
-        //                 }
-
-        //                 // push l'array idList dans le localstorage en tant que key "products"
-        //                 let idListStorage = JSON.stringify(idList)
-        //                 localStorage.setItem("products", idListStorage)
-        //                 console.log(idList)
-        //             }
-
-        //             // envoie les informations au serveur via la requête POST 
-        //             async function send() {
-        //                 const { firstName, lastName, address, city, email } = contactArray[0]
-
-        //                 const toSend = {
-        //                     "contact": { // envoie l'objet contact
-        //                         "firstName": firstName,
-        //                         "lastName": lastName,
-        //                         "address": address,
-        //                         "city": city,
-        //                         "email": email
-        //                     },
-        //                     "products": idList // envoie le tableau des produits
-        //                 }
-        //                 await fetch("http://localhost:3000/api/products/order", {
-        //                     method: "POST",
-        //                     headers: {
-        //                         'Accept': 'application/json',
-        //                         'Content-Type': 'application/json',
-        //                     },
-        //                     body: JSON.stringify(toSend)
-        //                 })
-
-        //                     .then(function (res) {
-        //                         if (res.ok) {
-        //                             console.log("post ok")
-        //                             // localStorage.removeItem('products')
-        //                             // window.localStorage.clear() // vide le localstorage une fois la commande envoyée
-        //                             return res.json()
-        //                         }
-        //                     })
-        //                     .then(function (result) {
-        //                         console.log(result.orderId)
-        //                         // localhost.../confirmation.html?id
-        //                     })
-        //             }
-
-        //         }
-        //         else {
-        //             alert("Veuillez remplir tous les champs du formulaire")
-        //         }
-        //     } // fin fonction sendToServer()
-
-        //     sendToServer()
-        // }) // fin addEventListener
-
-
-    }) // fermeture fetch
-
+    })
 
 // -------------------------------------------------------------------
 // --------------------------- Prix total ----------------------------
@@ -180,7 +48,6 @@ async function totalCalculation() {
     const productList = await fetch("http://localhost:3000/api/products") // appelle l'API
         .then(function (response) {
             if (response.ok) {
-                console.log("réponse ok")
                 return response.json(); // si la requête s'est bien passée, retourne le résultat de la requête au format .json
             }
         })
@@ -200,7 +67,6 @@ async function totalCalculation() {
 // affiche le prix total du panier
 const printTotalPrice = async () => {
     const totalCartPrice = await totalCalculation()
-    console.log(totalCartPrice)
     totalPrice.innerText = totalCartPrice
 }
 
@@ -231,20 +97,7 @@ function localStorageItemsCalculation(id, color, qty) {
     console.log("Mise à jour du montant de l'article dans le localstorage")
 }
 
-// fonction qui supprime l'article dans le localstorage
-function deleteArticle(id, color) {
-    let cartArray = localStorage.getItem("cart") !== null ? JSON.parse(localStorage.getItem("cart")) : [] // récupère les informations de localstorage "cart" s'il en contient, sinon, créé un array "cartArray" vide
-    let toDelete = cartArray.findIndex((obj => obj.id == id && obj.color == color)) // retourne le nombre correspondant à l'article à supprimer dans la key "cart" du localstorage
-    index = toDelete
-    cartArray.splice(toDelete, 1) // supprime 1 élément à partir de la valeur index de "toDelete"
 
-    console.log(index)
-
-    let cartStorage = JSON.stringify(cartArray)
-    localStorage.setItem("cart", cartStorage) // réassigne la key "cart" dans le localstorage avec les nouvelles valeurs
-    console.log("Suppresion de l'article")
-    // document.location.reload() // actualise la page pour bien prendre en compte les changements dans le localstorage, afin d'éviter que les articles supprimés soient tout de même envoyés dans la key "products"
-}
 
 function displayProduct(id, name, color, price, amount, imageUrl, altTxt) {
     // créer un élément article.cart__item dans le parent section#cart__items
@@ -335,8 +188,8 @@ function displayProduct(id, name, color, price, amount, imageUrl, altTxt) {
         productPrice.innerText = (price * productQuantityInput.value) + " €"
     }
 
-// -------------------------------------------------------------------
-// ------------------------- Event listeners -------------------------
+    // -------------------------------------------------------------------
+    // ------------------------- Event listeners -------------------------
 
     productQuantityInput.addEventListener("change", function () {
         productQuantityInput.setAttribute("value", productQuantityInput.value)
@@ -352,26 +205,33 @@ function displayProduct(id, name, color, price, amount, imageUrl, altTxt) {
         cartItemsCalculation() // recalcule le total d'articles dans le panier
         deleteArticle(id, color) // supprime l'article dans le localstorage
         printTotalPrice() // affiche le nouveau prix total du panier
+        deleteId(id)
     })
+}
 
+let deleteButton = document.querySelectorAll(".deleteItem").length
+console.log('long ' + deleteButton)
+
+
+// fonction qui supprime l'article dans le localstorage
+function deleteArticle(id, color) {
+    let cartArray = localStorage.getItem("cart") !== null ? JSON.parse(localStorage.getItem("cart")) : [] // récupère les informations de localstorage "cart" s'il en contient, sinon, créé un array "cartArray" vide
+    let toDelete = cartArray.findIndex((obj => obj.id == id && obj.color == color)) // retourne le nombre correspondant à l'article à supprimer dans la key "cart" du localstorage
+    index = toDelete
+    cartArray.splice(toDelete, 1) // supprime 1 élément à partir de la valeur index de "toDelete"
+
+    console.log('index1 ' + index)
+
+    let cartStorage = JSON.stringify(cartArray)
+    localStorage.setItem("cart", cartStorage) // réassigne la key "cart" dans le localstorage avec les nouvelles valeurs
+    console.log("Suppresion de l'article")
+    // document.location.reload() // actualise la page pour bien prendre en compte les changements dans le localstorage, afin d'éviter que les articles supprimés soient tout de même envoyés dans la key "products"
 }
 
 // -------------------------------------------------------------------
 // --------------------- Formulaire de commmande ---------------------
 
 let contactArray = []
-
-// fonction qui affiche un message d'erreur si l'input contient un nombre
-function errorMsgContainsNumber(input, textSelector) {
-    input.addEventListener('input', function (e) {
-        let value = e.target.value
-        if (/[0-9]/.test(value)) {
-            textSelector.innerText = "Champ non valide"
-        } else {
-            textSelector.innerText = ""
-        }
-    })
-}
 
 let firstNameInput = document.getElementById("firstName")
 let firstNameErrorMsg = document.getElementById("firstNameErrorMsg")
@@ -398,88 +258,112 @@ emailInput.addEventListener('input', function (e) {
     }
 })
 
+// fonction qui affiche un message d'erreur si l'input contient un nombre
+function errorMsgContainsNumber(input, textSelector) {
+    input.addEventListener('input', function (e) {
+        let value = e.target.value
+        if (/[0-9]/.test(value)) {
+            textSelector.innerText = "Champ non valide"
+        } else {
+            textSelector.innerText = ""
+        }
+    })
+}
+
+// fonction qui récupère les id des produits et les réunit dans le localstorage sous la key "products"
+function getIds() {
+    let idList = []
+
+    for (i = 0; i < cartStorage.length; i++) { // parcourt chaque article du cartStorage (key "cart" du localstorage), puis récupère/push l'élément "id" de chaque article dans l'array idList
+        idList.push(cartStorage[i].id)
+    }
+
+    // push l'array idList dans le localstorage en tant que key "products"
+    let idListStorage = JSON.stringify(idList)
+    localStorage.setItem("products", idListStorage)
+    console.log(idList)
+}
+
+function deleteId(id) {
+    let getIdStorage = JSON.parse(localStorage.getItem("products"))
+    let toDelete = getIdStorage.findIndex((obj => obj.id == id)) // retourne le nombre correspondant à l'article à supprimer dans la key "products" du localstorage
+    index = toDelete
+    getIdStorage.splice(toDelete, 1) // supprime 1 élément à partir de la valeur index de "toDelete"
+
+    let idListStorage = JSON.stringify(getIdStorage)
+    localStorage.setItem("products", idListStorage) // réassigne la key "products" dans le localstorage avec les nouvelles valeurs
+    console.log("Suppresion de l'id")
+    console.log("index2 " + index)
+    console.log("id " + id)
+}
+
 // -------------------------------------------------------------------
 // ----------------- Event listener boutton commande -----------------
 
 let orderButton = document.getElementById("order")
 orderButton.addEventListener('click', function (e) {
-    // e.preventDefault() // commenter/décommenter pour empêcher l'action du bouton, afin d'effectuer les tests
+    e.preventDefault() // commenter/décommenter pour empêcher l'action du bouton, afin d'effectuer les tests
     sendToServer()
+})
 
-    // fonction qui push les informations de contact dans le localstorage, si tous les champs sont bien remplis
-    function sendToServer() {
+// fonction qui push les informations de contact dans le localstorage, si tous les champs sont bien remplis
+function sendToServer() {
 
-        if (cartStorage.length == 0) {
-            alert("Votre panier est vide")
-            console.log("Le panier est vide")
-        }
+    if (cartStorage.length == 0) {
+        alert("Votre panier est vide")
+        console.log("Le panier est vide")
+    }
 
-        else if (firstNameInput.value && lastNameInput.value && addressInput.value && cityInput.value && emailInput.value) { // vérifie que tous les champs sont remplis, puis push les informations de contact dans le localstorage (key "contact")
-            contactArray.push({ "firstName": firstNameInput.value, "lastName": lastNameInput.value, "address": addressInput.value, "city": cityInput.value, "email": emailInput.value })
+    else if (firstNameInput.value && lastNameInput.value && addressInput.value && cityInput.value && emailInput.value) { // vérifie que tous les champs sont remplis, puis push les informations de contact dans le localstorage (key "contact")
+        contactArray.push({ "firstName": firstNameInput.value, "lastName": lastNameInput.value, "address": addressInput.value, "city": cityInput.value, "email": emailInput.value })
 
-            let contactStorage = JSON.stringify(contactArray)
-            localStorage.setItem("contact", contactStorage)
+        let contactStorage = JSON.stringify(contactArray)
+        localStorage.setItem("contact", contactStorage)
 
-            let idList = []
+        send() // envoie les informations au serveur via la requête POST 
 
-            getIds() // stocke les id depuis l'array cartStorage vers l'array idList
-            send() // envoie les informations au serveur via la requête POST 
+    }
 
-            // stocke les id depuis l'array cartStorage vers l'array idList, afin d'isoler cette donnée en particulier
-            function getIds() {
+    else {
+        alert("Veuillez remplir tous les champs du formulaire")
+    }
+}
 
-                for (i = 0; i < cartStorage.length; i++) { // parcourt chaque article du cartStorage (key "cart" du localstorage), puis récupère/push l'élément "id" de chaque article dans l'array idList
-                    idList.push(cartStorage[i].id)
-                }
+// envoie les informations au serveur via la requête POST 
+async function send() {
+    let idList = JSON.parse(localStorage.getItem("products"))
 
-                // push l'array idList dans le localstorage en tant que key "products"
-                let idListStorage = JSON.stringify(idList)
-                localStorage.setItem("products", idListStorage)
-                console.log(idList)
+    const { firstName, lastName, address, city, email } = contactArray[0]
+
+    const toSend = {
+        "contact": { // envoie l'objet contact
+            "firstName": firstName,
+            "lastName": lastName,
+            "address": address,
+            "city": city,
+            "email": email
+        },
+        "products": idList // envoie le tableau des produits
+    }
+    await fetch("http://localhost:3000/api/products/order", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(toSend)
+    })
+
+        .then(function (res) {
+            if (res.ok) {
+                console.log("post ok")
+                // localStorage.removeItem('products')
+                // window.localStorage.clear() // vide le localstorage une fois la commande envoyée
+                return res.json()
             }
-
-            // envoie les informations au serveur via la requête POST 
-            async function send() {
-                const { firstName, lastName, address, city, email } = contactArray[0]
-
-                const toSend = {
-                    "contact": { // envoie l'objet contact
-                        "firstName": firstName,
-                        "lastName": lastName,
-                        "address": address,
-                        "city": city,
-                        "email": email
-                    },
-                    "products": idList // envoie le tableau des produits
-                }
-                await fetch("http://localhost:3000/api/products/order", {
-                    method: "POST",
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(toSend)
-                })
-
-                    .then(function (res) {
-                        if (res.ok) {
-                            console.log("post ok")
-                            // localStorage.removeItem('products')
-                            // window.localStorage.clear() // vide le localstorage une fois la commande envoyée
-                            return res.json()
-                        }
-                    })
-                    .then(function (result) { // dirige vers la page de validation de commande, en injectant l'id de la commande dans l'url
-                        console.log(result.orderId)
-                        document.location.href = `confirmation.html?orderId=${result.orderId}`
-                    })
-            }
-
-        }
-        else {
-            alert("Veuillez remplir tous les champs du formulaire")
-        }
-    } // fin fonction sendToServer()
-
-    // sendToServer()
-}) // fin addEventListener
+        })
+        .then(function (result) { // dirige vers la page de validation de commande, en injectant l'id de la commande dans l'url
+            console.log(result.orderId)
+            document.location.href = `confirmation.html?orderId=${result.orderId}`
+        })
+}
