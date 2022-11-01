@@ -69,8 +69,14 @@ const printTotalPrice = async () => {
     const totalCartPrice = await totalCalculation()
     totalPrice.innerText = totalCartPrice
 }
-
 printTotalPrice()
+
+// const supp = async () => {
+//     // await displayProduct()
+//     let contentSettingsDeleteItem = document.querySelectorAll(".deleteItem").length
+//     console.log('long supp ' + contentSettingsDeleteItem)
+// }
+// supp()
 
 // -------------------------------------------------------------------
 
@@ -206,11 +212,10 @@ function displayProduct(id, name, color, price, amount, imageUrl, altTxt) {
         deleteArticle(id, color) // supprime l'article dans le localstorage
         printTotalPrice() // affiche le nouveau prix total du panier
         deleteId(id)
-    })
-}
+        // supp()
 
-let deleteButton = document.querySelectorAll(".deleteItem").length
-console.log('long ' + deleteButton)
+    })
+} // fin fonction displayProduct
 
 
 // fonction qui supprime l'article dans le localstorage
@@ -227,6 +232,44 @@ function deleteArticle(id, color) {
     console.log("Suppresion de l'article")
     // document.location.reload() // actualise la page pour bien prendre en compte les changements dans le localstorage, afin d'éviter que les articles supprimés soient tout de même envoyés dans la key "products"
 }
+
+// fonction qui récupère les id des produits et les réunit dans le localstorage sous la key "products"
+function getIds() {
+    let idList = []
+
+    for (i = 0; i < cartStorage.length; i++) { // parcourt chaque article du cartStorage (key "cart" du localstorage), puis récupère/push l'élément "id" de chaque article dans l'array idList
+        idList.push(cartStorage[i].id)
+    }
+
+    // push l'array idList dans le localstorage en tant que key "products"
+    let idListStorage = JSON.stringify(idList)
+    localStorage.setItem("products", idListStorage)
+    console.log("idList = " + idList)
+}
+
+function deleteId(id) {
+    let getIdStorage = JSON.parse(localStorage.getItem("products"))
+    let toDelete = getIdStorage.findIndex((obj => obj.id == id)) // retourne le nombre correspondant à l'article à supprimer dans la key "products" du localstorage
+    index = toDelete
+    getIdStorage.splice(toDelete, 1) // supprime 1 élément à partir de la valeur index de "toDelete"
+
+    let idListStorage = JSON.stringify(getIdStorage)
+    localStorage.setItem("products", idListStorage) // réassigne la key "products" dans le localstorage avec les nouvelles valeurs
+    console.log("Suppresion de l'id " + id)
+    console.log("index2 " + index)
+}
+
+// const deleteId = async (id) => {
+//     let getIdStorage = JSON.parse(localStorage.getItem("products"))
+//     let toDelete = getIdStorage.findIndex((obj => obj.id == id)) // retourne le nombre correspondant à l'article à supprimer dans la key "products" du localstorage
+//     index = toDelete
+//     getIdStorage.splice(toDelete, 1) // supprime 1 élément à partir de la valeur index de "toDelete"
+
+//     let idListStorage = JSON.stringify(getIdStorage)
+//     localStorage.setItem("products", idListStorage) // réassigne la key "products" dans le localstorage avec les nouvelles valeurs
+//     console.log("Suppresion de l'id " + id)
+//     console.log("index2 " + index)
+// }
 
 // -------------------------------------------------------------------
 // --------------------- Formulaire de commmande ---------------------
@@ -270,39 +313,14 @@ function errorMsgContainsNumber(input, textSelector) {
     })
 }
 
-// fonction qui récupère les id des produits et les réunit dans le localstorage sous la key "products"
-function getIds() {
-    let idList = []
 
-    for (i = 0; i < cartStorage.length; i++) { // parcourt chaque article du cartStorage (key "cart" du localstorage), puis récupère/push l'élément "id" de chaque article dans l'array idList
-        idList.push(cartStorage[i].id)
-    }
-
-    // push l'array idList dans le localstorage en tant que key "products"
-    let idListStorage = JSON.stringify(idList)
-    localStorage.setItem("products", idListStorage)
-    console.log(idList)
-}
-
-function deleteId(id) {
-    let getIdStorage = JSON.parse(localStorage.getItem("products"))
-    let toDelete = getIdStorage.findIndex((obj => obj.id == id)) // retourne le nombre correspondant à l'article à supprimer dans la key "products" du localstorage
-    index = toDelete
-    getIdStorage.splice(toDelete, 1) // supprime 1 élément à partir de la valeur index de "toDelete"
-
-    let idListStorage = JSON.stringify(getIdStorage)
-    localStorage.setItem("products", idListStorage) // réassigne la key "products" dans le localstorage avec les nouvelles valeurs
-    console.log("Suppresion de l'id")
-    console.log("index2 " + index)
-    console.log("id " + id)
-}
 
 // -------------------------------------------------------------------
 // ----------------- Event listener boutton commande -----------------
 
 let orderButton = document.getElementById("order")
 orderButton.addEventListener('click', function (e) {
-    e.preventDefault() // commenter/décommenter pour empêcher l'action du bouton, afin d'effectuer les tests
+    // e.preventDefault() // commenter/décommenter pour empêcher l'action du bouton, afin d'effectuer les tests
     sendToServer()
 })
 
