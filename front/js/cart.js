@@ -2,9 +2,6 @@
 let cartStorageLecture = localStorage.getItem("cart")
 let cartStorage = JSON.parse(cartStorageLecture)
 
-// getIds()
-
-
 fetch("http://localhost:3000/api/products") // appelle l'API
     .then(function (response) {
         if (response.ok) {
@@ -71,13 +68,6 @@ const printTotalPrice = async () => {
 }
 printTotalPrice()
 
-// const supp = async () => {
-//     // await displayProduct()
-//     let contentSettingsDeleteItem = document.querySelectorAll(".deleteItem").length
-//     console.log('long supp ' + contentSettingsDeleteItem)
-// }
-// supp()
-
 // -------------------------------------------------------------------
 
 // fonction qui calcule/recalcule le nombre d'articles total dans le panier
@@ -87,7 +77,7 @@ function cartItemsCalculation() {
     for (let i = 0; i < allInputs.length; i++) { // parcourt les éléments ayant la classe .itemQuantity, puis additionne leur valeurs pour donner un total (dans la variable "total")
         total += parseInt(allInputs[i].value) // convertit les caractères en nombre afin de pouvoir les additionner
     }
-    console.log("Mise à jour du nombre total d'articles dans le panier")
+    console.log("Mise à jour du total d'articles dans le panier")
     totalQuantity.innerText = parseInt(total)
     // localStorageItemsCalculation(id) // recalcule le nombre d'articles total dans le panier
 }
@@ -102,8 +92,6 @@ function localStorageItemsCalculation(id, color, qty) {
     localStorage.setItem("cart", cartStorage)  // réassigne la key "cart" dans le localstorage avec les nouvelles valeurs
     console.log("Mise à jour du montant de l'article dans le localstorage")
 }
-
-
 
 function displayProduct(id, name, color, price, amount, imageUrl, altTxt) {
     // créer un élément article.cart__item dans le parent section#cart__items
@@ -211,7 +199,6 @@ function displayProduct(id, name, color, price, amount, imageUrl, altTxt) {
         cartItemsCalculation() // recalcule le total d'articles dans le panier
         deleteArticle(id, color) // supprime l'article dans le localstorage "cart" et "products"
         printTotalPrice() // affiche le nouveau prix total du panier
-        // deleteId(id) // supprime l'article dans le localstorage "products"
     })
 } // fin fonction displayProduct
 
@@ -225,14 +212,6 @@ function deleteArticle(id, color) {
     let cartStorage = JSON.stringify(cartArray)
     localStorage.setItem("cart", cartStorage) // réassigne la key "cart" dans le localstorage avec les nouvelles valeurs
     console.log("Suppresion de l'article")
-
-    // supprime du localstorage "products"
-    // let getIdStorage = JSON.parse(localStorage.getItem("products"))
-    // getIdStorage.splice(toDelete, 1) // supprime 1 élément à partir de la valeur index de "toDelete"
-    // let idListStorage = JSON.stringify(getIdStorage)
-    // localStorage.setItem("products", idListStorage) // réassigne la key "products" dans le localstorage avec les nouvelles valeurs
-    // console.log("Suppresion de l'id " + id)
-    // console.log("index " + index)
 }
 
 // fonction qui récupère les id des produits et les réunit dans le localstorage sous la key "products"
@@ -248,18 +227,6 @@ function getIds() {
     localStorage.setItem("products", idListStorage)
     console.log("idList = " + idList)
 }
-
-// function deleteId(id) {
-//     let getIdStorage = JSON.parse(localStorage.getItem("products"))
-//     let toDelete = getIdStorage.findIndex((obj => obj.id == id)) // retourne le nombre correspondant à l'article à supprimer dans la key "products" du localstorage
-//     index = toDelete
-//     getIdStorage.splice(toDelete, 1) // supprime 1 élément à partir de la valeur index de "toDelete"
-
-//     let idListStorage = JSON.stringify(getIdStorage)
-//     localStorage.setItem("products", idListStorage) // réassigne la key "products" dans le localstorage avec les nouvelles valeurs
-//     console.log("Suppresion de l'id " + id)
-//     console.log("index " + index)
-// }
 
 
 // -------------------------------------------------------------------
@@ -344,14 +311,13 @@ function removeErrorMsgEmptyField(input, textSelector) {
 
 let orderButton = document.getElementById("order")
 orderButton.addEventListener('click', function (e) {
-    e.preventDefault() // commenter/décommenter pour empêcher l'action du bouton, afin d'effectuer les tests
+    // e.preventDefault()
     sendToServer()
 })
 
 // fonction qui push les informations de contact dans le localstorage, si tous les champs sont bien remplis
 function sendToServer() {
     if (cartStorage.length == 0) {
-        // alert("Votre panier est vide")
         console.log("Le panier est vide")
     }
 
@@ -371,7 +337,6 @@ function sendToServer() {
 
 // envoie les informations au serveur via la requête POST 
 async function send() {
-    // let idList = JSON.parse(localStorage.getItem("products"))
     let idList = generateProductIdList();
 
     const { firstName, lastName, address, city, email } = contactArray[0]
@@ -407,7 +372,7 @@ async function send() {
         })
 }
 
-// fonction qui récupère les ids uniques des produits dans le localstorage "cart", pour les réunir dans un nouveau tableau
+// fonction qui récupère les ids uniques des produits dans le localstorage "cart", pour les réunir dans le tableau qui sera envoyé lors de la commande
 function generateProductIdList() {
     const myCart = JSON.parse(localStorage.getItem("cart"))
     const idList = myCart.map((product) => product.id) // récupère les ids
