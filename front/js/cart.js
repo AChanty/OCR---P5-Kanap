@@ -2,7 +2,7 @@
 let cartStorageLecture = localStorage.getItem("cart")
 let cartStorage = JSON.parse(cartStorageLecture)
 
-getIds()
+// getIds()
 
 
 fetch("http://localhost:3000/api/products") // appelle l'API
@@ -209,11 +209,9 @@ function displayProduct(id, name, color, price, amount, imageUrl, altTxt) {
     contentSettingsDeleteItem.addEventListener('click', function () {
         newArticle.remove() // supprime l'élément du DOM
         cartItemsCalculation() // recalcule le total d'articles dans le panier
-        deleteArticle(id, color) // supprime l'article dans le localstorage
+        deleteArticle(id, color) // supprime l'article dans le localstorage "cart" et "products"
         printTotalPrice() // affiche le nouveau prix total du panier
-        deleteId(id)
-        // supp()
-
+        // deleteId(id) // supprime l'article dans le localstorage "products"
     })
 } // fin fonction displayProduct
 
@@ -224,13 +222,17 @@ function deleteArticle(id, color) {
     let toDelete = cartArray.findIndex((obj => obj.id == id && obj.color == color)) // retourne le nombre correspondant à l'article à supprimer dans la key "cart" du localstorage
     index = toDelete
     cartArray.splice(toDelete, 1) // supprime 1 élément à partir de la valeur index de "toDelete"
-
-    console.log('index1 ' + index)
-
     let cartStorage = JSON.stringify(cartArray)
     localStorage.setItem("cart", cartStorage) // réassigne la key "cart" dans le localstorage avec les nouvelles valeurs
     console.log("Suppresion de l'article")
-    // document.location.reload() // actualise la page pour bien prendre en compte les changements dans le localstorage, afin d'éviter que les articles supprimés soient tout de même envoyés dans la key "products"
+
+    // supprime du localstorage "products"
+    // let getIdStorage = JSON.parse(localStorage.getItem("products"))
+    // getIdStorage.splice(toDelete, 1) // supprime 1 élément à partir de la valeur index de "toDelete"
+    // let idListStorage = JSON.stringify(getIdStorage)
+    // localStorage.setItem("products", idListStorage) // réassigne la key "products" dans le localstorage avec les nouvelles valeurs
+    // console.log("Suppresion de l'id " + id)
+    // console.log("index " + index)
 }
 
 // fonction qui récupère les id des produits et les réunit dans le localstorage sous la key "products"
@@ -247,19 +249,7 @@ function getIds() {
     console.log("idList = " + idList)
 }
 
-function deleteId(id) {
-    let getIdStorage = JSON.parse(localStorage.getItem("products"))
-    let toDelete = getIdStorage.findIndex((obj => obj.id == id)) // retourne le nombre correspondant à l'article à supprimer dans la key "products" du localstorage
-    index = toDelete
-    getIdStorage.splice(toDelete, 1) // supprime 1 élément à partir de la valeur index de "toDelete"
-
-    let idListStorage = JSON.stringify(getIdStorage)
-    localStorage.setItem("products", idListStorage) // réassigne la key "products" dans le localstorage avec les nouvelles valeurs
-    console.log("Suppresion de l'id " + id)
-    console.log("index2 " + index)
-}
-
-// const deleteId = async (id) => {
+// function deleteId(id) {
 //     let getIdStorage = JSON.parse(localStorage.getItem("products"))
 //     let toDelete = getIdStorage.findIndex((obj => obj.id == id)) // retourne le nombre correspondant à l'article à supprimer dans la key "products" du localstorage
 //     index = toDelete
@@ -268,8 +258,9 @@ function deleteId(id) {
 //     let idListStorage = JSON.stringify(getIdStorage)
 //     localStorage.setItem("products", idListStorage) // réassigne la key "products" dans le localstorage avec les nouvelles valeurs
 //     console.log("Suppresion de l'id " + id)
-//     console.log("index2 " + index)
+//     console.log("index " + index)
 // }
+
 
 // -------------------------------------------------------------------
 // --------------------- Formulaire de commmande ---------------------
@@ -285,8 +276,11 @@ let lastNameErrorMsg = document.getElementById("lastNameErrorMsg")
 errorMsgContainsNumber(lastNameInput, lastNameErrorMsg)
 
 let addressInput = document.getElementById("address")
+let addressErrorMsg = document.getElementById("addressErrorMsg")
 
 let cityInput = document.getElementById("city")
+let cityMsg = document.getElementById("cityErrorMsg")
+
 
 let emailInput = document.getElementById("email")
 let emailErrorMsg = document.getElementById("emailErrorMsg")
@@ -313,22 +307,51 @@ function errorMsgContainsNumber(input, textSelector) {
     })
 }
 
+// fonction qui vérifie si un champ est vide, puis retire le message d'erreur au remplissage du champ
+// les champs prénom, nom et email ne contiennent pas la fonction "removeErrorMsgEmptyField" car la suppression du message d'erreur est déjà pris en charge par les event listeners input dans ces champs 
+function checkFormInputs() {
+    if (firstNameInput.value.length == 0) {
+        firstNameErrorMsg.innerText = "Veuillez remplir ce champ"
+    }
+    if (lastNameInput.value.length == 0) {
+        lastNameErrorMsg.innerText = "Veuillez remplir ce champ"
+    }
+    if (addressInput.value.length == 0) {
+        addressErrorMsg.innerText = "Veuillez remplir ce champ"
+        removeErrorMsgEmptyField(addressInput, addressErrorMsg)
+    }
+    if (cityInput.value.length == 0) {
+        cityMsg.innerText = "Veuillez remplir ce champ"
+        removeErrorMsgEmptyField(cityInput, cityMsg)
+    }
+    if (emailInput.value.length == 0) {
+        emailErrorMsg.innerText = "Veuillez remplir ce champ"
+    }
+}
 
+// fonction qui retire le message d'erreur lorsqu'un champ est rempli
+function removeErrorMsgEmptyField(input, textSelector) {
+    input.addEventListener('input', function (e) {
+        let value = e.target.value
+        if (value.length >= 1) {
+            textSelector.innerText = ""
+        }
+    })
+}
 
 // -------------------------------------------------------------------
 // ----------------- Event listener boutton commande -----------------
 
 let orderButton = document.getElementById("order")
 orderButton.addEventListener('click', function (e) {
-    // e.preventDefault() // commenter/décommenter pour empêcher l'action du bouton, afin d'effectuer les tests
+    e.preventDefault() // commenter/décommenter pour empêcher l'action du bouton, afin d'effectuer les tests
     sendToServer()
 })
 
 // fonction qui push les informations de contact dans le localstorage, si tous les champs sont bien remplis
 function sendToServer() {
-
     if (cartStorage.length == 0) {
-        alert("Votre panier est vide")
+        // alert("Votre panier est vide")
         console.log("Le panier est vide")
     }
 
@@ -339,17 +362,17 @@ function sendToServer() {
         localStorage.setItem("contact", contactStorage)
 
         send() // envoie les informations au serveur via la requête POST 
-
     }
 
     else {
-        alert("Veuillez remplir tous les champs du formulaire")
+        checkFormInputs() // vérifie si un champ est vide, puis retire le message d'erreur au remplissage du champ
     }
 }
 
 // envoie les informations au serveur via la requête POST 
 async function send() {
-    let idList = JSON.parse(localStorage.getItem("products"))
+    // let idList = JSON.parse(localStorage.getItem("products"))
+    let idList = generateProductIdList();
 
     const { firstName, lastName, address, city, email } = contactArray[0]
 
@@ -375,8 +398,6 @@ async function send() {
         .then(function (res) {
             if (res.ok) {
                 console.log("post ok")
-                // localStorage.removeItem('products')
-                // window.localStorage.clear() // vide le localstorage une fois la commande envoyée
                 return res.json()
             }
         })
@@ -384,4 +405,12 @@ async function send() {
             console.log(result.orderId)
             document.location.href = `confirmation.html?orderId=${result.orderId}`
         })
+}
+
+// fonction qui récupère les ids uniques des produits dans le localstorage "cart", pour les réunir dans un nouveau tableau
+function generateProductIdList() {
+    const myCart = JSON.parse(localStorage.getItem("cart"))
+    const idList = myCart.map((product) => product.id) // récupère les ids
+    const noDuplicate = [...new Set(idList)] // créé un tableau des ids en supprimant les doublons
+    return noDuplicate
 }

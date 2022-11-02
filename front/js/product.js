@@ -66,8 +66,7 @@ fetch("http://localhost:3000/api/products") // appelle l'API
                     cartArray.push({ "id": id, "color": colorChosen, "amount": Number(quantityChosen) })
                 }
 
-                if (colorChosen == false || quantityChosen == 0 || quantityChosen > 100) { // si une couleur ou un nombre d'article n'est pas indiqué, renvoie une alerte d'erreur
-                    alert("Veuillez choisir une couleur et un nombre d'article valide à ajouter au panier")
+                if (colorChosen == false || quantityChosen == 0 || quantityChosen > 100) { // si une couleur ou un nombre d'article n'est pas indiqué, rien n'est ajouté au panier
 
                 } else if (!cartArray.includes(myProduct) && !cartArray.includes(colorChosen) && !cartArray.find(product => product.id === id)) { // si le produit et la couleur ne sont pas déjà présents dans le panier
                     quantityTotal += Number(quantityChosen)
