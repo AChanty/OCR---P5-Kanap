@@ -56,7 +56,6 @@ async function totalCalculation() {
 
     for (i = 0; i < cartArray.length; i++) {
         total += cartArray[i].price * cartArray[i].amount
-        // console.log("total = " + total)
     }
     return total
 }
@@ -77,9 +76,7 @@ function cartItemsCalculation() {
     for (let i = 0; i < allInputs.length; i++) { // parcourt les éléments ayant la classe .itemQuantity, puis additionne leur valeurs pour donner un total (dans la variable "total")
         total += parseInt(allInputs[i].value) // convertit les caractères en nombre afin de pouvoir les additionner
     }
-    console.log("Mise à jour du total d'articles dans le panier")
     totalQuantity.innerText = parseInt(total)
-    // localStorageItemsCalculation(id) // recalcule le nombre d'articles total dans le panier
 }
 
 // fonction qui calculre/recalcule le nombre d'articles par référence dans le localstorage
@@ -90,7 +87,6 @@ function localStorageItemsCalculation(id, color, qty) {
 
     let cartStorage = JSON.stringify(cartArray)
     localStorage.setItem("cart", cartStorage)  // réassigne la key "cart" dans le localstorage avec les nouvelles valeurs
-    console.log("Mise à jour du montant de l'article dans le localstorage")
 }
 
 function displayProduct(id, name, color, price, amount, imageUrl, altTxt) {
@@ -211,7 +207,6 @@ function deleteArticle(id, color) {
     cartArray.splice(toDelete, 1) // supprime 1 élément à partir de la valeur index de "toDelete"
     let cartStorage = JSON.stringify(cartArray)
     localStorage.setItem("cart", cartStorage) // réassigne la key "cart" dans le localstorage avec les nouvelles valeurs
-    console.log("Suppresion de l'article")
 }
 
 // fonction qui récupère les id des produits et les réunit dans le localstorage sous la key "products"
@@ -225,7 +220,6 @@ function getIds() {
     // push l'array idList dans le localstorage en tant que key "products"
     let idListStorage = JSON.stringify(idList)
     localStorage.setItem("products", idListStorage)
-    console.log("idList = " + idList)
 }
 
 
@@ -318,7 +312,7 @@ orderButton.addEventListener('click', function (e) {
 // fonction qui push les informations de contact dans le localstorage, si tous les champs sont bien remplis
 function sendToServer() {
     if (cartStorage.length == 0) {
-        console.log("Le panier est vide")
+
     }
 
     else if (firstNameInput.value && lastNameInput.value && addressInput.value && cityInput.value && emailInput.value) { // vérifie que tous les champs sont remplis, puis push les informations de contact dans le localstorage (key "contact")
@@ -362,12 +356,10 @@ async function send() {
 
         .then(function (res) {
             if (res.ok) {
-                console.log("post ok")
                 return res.json()
             }
         })
         .then(function (result) { // dirige vers la page de validation de commande, en injectant l'id de la commande dans l'url
-            console.log(result.orderId)
             document.location.href = `confirmation.html?orderId=${result.orderId}`
         })
 }
