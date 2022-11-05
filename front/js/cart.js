@@ -242,7 +242,6 @@ let addressErrorMsg = document.getElementById("addressErrorMsg")
 let cityInput = document.getElementById("city")
 let cityMsg = document.getElementById("cityErrorMsg")
 
-
 let emailInput = document.getElementById("email")
 let emailErrorMsg = document.getElementById("emailErrorMsg")
 
@@ -270,13 +269,22 @@ function errorMsgContainsNumber(input, textSelector) {
 
 // fonction qui vérifie si un champ est vide, puis retire le message d'erreur au remplissage du champ
 // les champs prénom, nom et email ne contiennent pas la fonction "removeErrorMsgEmptyField" car la suppression du message d'erreur est déjà pris en charge par les event listeners input dans ces champs 
-function checkFormInputs() {
+function checkFormInputs(e) {
+    let okToSend = true
     if (firstNameInput.value.length == 0) {
         firstNameErrorMsg.innerText = "Veuillez remplir ce champ"
     }
+    // else if (/[0-9]/.test(firstNameInput.value)) {
+    //     firstNameErrorMsg.innerText = "Merci de n'utiliser que des lettres"
+    //     e.preventDefault()
+    // }
     if (lastNameInput.value.length == 0) {
         lastNameErrorMsg.innerText = "Veuillez remplir ce champ"
     }
+    // else if (/[0-9]/.test(lastNameInput.value)) {
+    //     lastNameErrorMsg.innerText = "Merci de n'utiliser que des lettres"
+    //     e.preventDefault()
+    // }
     if (addressInput.value.length == 0) {
         addressErrorMsg.innerText = "Veuillez remplir ce champ"
         removeErrorMsgEmptyField(addressInput, addressErrorMsg)
@@ -288,6 +296,10 @@ function checkFormInputs() {
     if (emailInput.value.length == 0) {
         emailErrorMsg.innerText = "Veuillez remplir ce champ"
     }
+    // else if (!emailInput.value.includes('@') || !emailInput.value.includes('.')) {
+    //     emailErrorMsg.innerText = "Merci d'entrer une adresse email valide"
+    //     e.preventDefault()
+    // }
 }
 
 // fonction qui retire le message d'erreur lorsqu'un champ est rempli
@@ -305,28 +317,59 @@ function removeErrorMsgEmptyField(input, textSelector) {
 
 let orderButton = document.getElementById("order")
 orderButton.addEventListener('click', function (e) {
-    // e.preventDefault()
-    sendToServer()
+    let okToSend = true
+
+    if (firstNameInput.value.length == 0) {
+        firstNameErrorMsg.innerText = "Veuillez remplir ce champ"
+    }
+    if (/[0-9]/.test(firstNameInput.value)) {
+        firstNameErrorMsg.innerText = "Merci de n'utiliser que des lettres"
+        okToSend = false
+        e.preventDefault()
+    }
+    if (lastNameInput.value.length == 0) {
+        lastNameErrorMsg.innerText = "Veuillez remplir ce champ"
+    }
+    if (/[0-9]/.test(lastNameInput.value)) {
+        lastNameErrorMsg.innerText = "Merci de n'utiliser que des lettres"
+        okToSend = false
+        e.preventDefault()
+    }
+    if (addressInput.value.length == 0) {
+        addressErrorMsg.innerText = "Veuillez remplir ce champ"
+        removeErrorMsgEmptyField(addressInput, addressErrorMsg)
+    }
+    if (cityInput.value.length == 0) {
+        cityMsg.innerText = "Veuillez remplir ce champ"
+        removeErrorMsgEmptyField(cityInput, cityMsg)
+    }
+    if (emailInput.value.length == 0) {
+        emailErrorMsg.innerText = "Veuillez remplir ce champ"
+    }
+    else if (!emailInput.value.includes('@') || !emailInput.value.includes('.')) {
+        emailErrorMsg.innerText = "Merci d'entrer une adresse email valide"
+        okToSend = false
+        e.preventDefault()
+    }
+    else if (okToSend == true) {
+        sendToServer()
+    }
 })
 
 // fonction qui push les informations de contact dans le localstorage, si tous les champs sont bien remplis
 function sendToServer() {
-    if (cartStorage.length == 0) {
-
-    }
-
-    else if (firstNameInput.value && lastNameInput.value && addressInput.value && cityInput.value && emailInput.value) { // vérifie que tous les champs sont remplis, puis push les informations de contact dans le localstorage (key "contact")
+    if (firstNameInput.value && lastNameInput.value && addressInput.value && cityInput.value && emailInput.value) { // vérifie que tous les champs sont remplis, puis push les informations de contact dans le localstorage (key "contact")
         contactArray.push({ "firstName": firstNameInput.value, "lastName": lastNameInput.value, "address": addressInput.value, "city": cityInput.value, "email": emailInput.value })
 
         let contactStorage = JSON.stringify(contactArray)
         localStorage.setItem("contact", contactStorage)
 
-        send() // envoie les informations au serveur via la requête POST 
+        send() // envoie les informations au serveur via la requête POST
     }
 
-    else {
-        checkFormInputs() // vérifie si un champ est vide, puis retire le message d'erreur au remplissage du champ
-    }
+//     else {
+//         // checkFormInputs() // vérifie si un champ est vide, puis retire le message d'erreur au remplissage du champ
+//     }
 }
 
 // envoie les informations au serveur via la requête POST 
