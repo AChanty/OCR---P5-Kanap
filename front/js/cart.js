@@ -363,32 +363,13 @@ orderForm.addEventListener('submit', function (e) {
     //     e.preventDefault()
     // }
     else if (okToSend == true) { // permet l'envoi de la commande si le formulaire est bien rempli
-        // sendToServer()
         send()
     }
 })
 
-// fonction qui push les informations de contact dans le localstorage, si tous les champs sont bien remplis
-function sendToServer() {
-    // if (firstNameInput.value && lastNameInput.value && addressInput.value && cityInput.value && emailInput.value) { // vérifie que tous les champs sont remplis, puis push les informations de contact dans le localstorage (key "contact")
-        contactArray.push({ "firstName": firstNameInput.value, "lastName": lastNameInput.value, "address": addressInput.value, "city": cityInput.value, "email": emailInput.value })
-
-        // let contactStorage = JSON.stringify(contactArray)
-        // localStorage.setItem("contact", contactStorage)
-
-        send() // envoie les informations au serveur via la requête POST
-    // }
-
-//     else {
-//         // checkFormInputs() // vérifie si un champ est vide, puis retire le message d'erreur au remplissage du champ
-//     }
-}
-
 // envoie les informations au serveur via la requête POST 
 async function send() {
     let idList = generateProductIdList();
-
-    // const { firstName, lastName, address, city, email } = contactArray[0]
 
     const toSend = {
         "contact": { // envoie l'objet contact
