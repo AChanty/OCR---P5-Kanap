@@ -89,3 +89,16 @@ fetch("http://localhost:3000/api/products") // appelle l'API
 
     }
     )
+
+    // empêche d'ajouter des quantités de produits invalides au panier
+    const inputQty = document.querySelector("#quantity");
+    inputQty.addEventListener("input", () => {
+        const qty = Number(inputQty.value);
+        if (qty > 100) {
+            inputQty.value = 100;
+        }
+
+        if (qty <= 0) {
+            inputQty.value = 1;
+        }
+    })

@@ -314,58 +314,70 @@ function removeErrorMsgEmptyField(input, textSelector) {
 
 // -------------------------------------------------------------------
 // ----------------- Event listener boutton commande -----------------
-
+const orderForm = document.querySelector(".cart__order__form");
 let orderButton = document.getElementById("order")
-orderButton.addEventListener('click', function (e) {
+orderForm.addEventListener('submit', function (e) {
+    e.preventDefault()
+    let cartStorageLecture = localStorage.getItem("cart")
+    let cartStorage = JSON.parse(cartStorageLecture)
     let okToSend = true
-
+    // mise en place de conditions qui empêche l'envoi de la commande si le formulaire n'est pas bien rempli
     if (firstNameInput.value.length == 0) {
         firstNameErrorMsg.innerText = "Veuillez remplir ce champ"
+        okToSend = false
     }
     if (/[0-9]/.test(firstNameInput.value)) {
         firstNameErrorMsg.innerText = "Merci de n'utiliser que des lettres"
         okToSend = false
-        e.preventDefault()
     }
     if (lastNameInput.value.length == 0) {
         lastNameErrorMsg.innerText = "Veuillez remplir ce champ"
+        okToSend = false
     }
     if (/[0-9]/.test(lastNameInput.value)) {
         lastNameErrorMsg.innerText = "Merci de n'utiliser que des lettres"
         okToSend = false
-        e.preventDefault()
     }
     if (addressInput.value.length == 0) {
         addressErrorMsg.innerText = "Veuillez remplir ce champ"
         removeErrorMsgEmptyField(addressInput, addressErrorMsg)
+        okToSend = false
     }
     if (cityInput.value.length == 0) {
         cityMsg.innerText = "Veuillez remplir ce champ"
         removeErrorMsgEmptyField(cityInput, cityMsg)
+        okToSend = false
     }
     if (emailInput.value.length == 0) {
         emailErrorMsg.innerText = "Veuillez remplir ce champ"
+        okToSend = false
     }
     else if (!emailInput.value.includes('@') || !emailInput.value.includes('.')) {
         emailErrorMsg.innerText = "Merci d'entrer une adresse email valide"
         okToSend = false
-        e.preventDefault()
     }
-    else if (okToSend == true) {
-        sendToServer()
+    if (cartStorage.length === 0) { // empêche l'envoi de la commande si le panier est vide
+        okToSend = false
+    }
+    // if (okToSend == false) {
+    //     e.preventDefault()
+    // }
+    else if (okToSend == true) { // permet l'envoi de la commande si le formulaire est bien rempli
+        // sendToServer()
+        send()
     }
 })
 
 // fonction qui push les informations de contact dans le localstorage, si tous les champs sont bien remplis
 function sendToServer() {
-    if (firstNameInput.value && lastNameInput.value && addressInput.value && cityInput.value && emailInput.value) { // vérifie que tous les champs sont remplis, puis push les informations de contact dans le localstorage (key "contact")
+    // if (firstNameInput.value && lastNameInput.value && addressInput.value && cityInput.value && emailInput.value) { // vérifie que tous les champs sont remplis, puis push les informations de contact dans le localstorage (key "contact")
         contactArray.push({ "firstName": firstNameInput.value, "lastName": lastNameInput.value, "address": addressInput.value, "city": cityInput.value, "email": emailInput.value })
 
-        let contactStorage = JSON.stringify(contactArray)
-        localStorage.setItem("contact", contactStorage)
+        // let contactStorage = JSON.stringify(contactArray)
+        // localStorage.setItem("contact", contactStorage)
 
         send() // envoie les informations au serveur via la requête POST
-    }
+    // }
 
 //     else {
 //         // checkFormInputs() // vérifie si un champ est vide, puis retire le message d'erreur au remplissage du champ
@@ -376,15 +388,15 @@ function sendToServer() {
 async function send() {
     let idList = generateProductIdList();
 
-    const { firstName, lastName, address, city, email } = contactArray[0]
+    // const { firstName, lastName, address, city, email } = contactArray[0]
 
     const toSend = {
         "contact": { // envoie l'objet contact
-            "firstName": firstName,
-            "lastName": lastName,
-            "address": address,
-            "city": city,
-            "email": email
+            "firstName": firstNameInput.value,
+            "lastName": lastNameInput.value,
+            "address": addressInput.value,
+            "city": cityInput.value,
+            "email": emailInput.value
         },
         "products": idList // envoie le tableau des produits
     }
