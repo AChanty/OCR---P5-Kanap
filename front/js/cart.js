@@ -267,41 +267,6 @@ function errorMsgContainsNumber(input, textSelector) {
     })
 }
 
-// fonction qui vérifie si un champ est vide, puis retire le message d'erreur au remplissage du champ
-// les champs prénom, nom et email ne contiennent pas la fonction "removeErrorMsgEmptyField" car la suppression du message d'erreur est déjà pris en charge par les event listeners input dans ces champs 
-function checkFormInputs(e) {
-    let okToSend = true
-    if (firstNameInput.value.length == 0) {
-        firstNameErrorMsg.innerText = "Veuillez remplir ce champ"
-    }
-    // else if (/[0-9]/.test(firstNameInput.value)) {
-    //     firstNameErrorMsg.innerText = "Merci de n'utiliser que des lettres"
-    //     e.preventDefault()
-    // }
-    if (lastNameInput.value.length == 0) {
-        lastNameErrorMsg.innerText = "Veuillez remplir ce champ"
-    }
-    // else if (/[0-9]/.test(lastNameInput.value)) {
-    //     lastNameErrorMsg.innerText = "Merci de n'utiliser que des lettres"
-    //     e.preventDefault()
-    // }
-    if (addressInput.value.length == 0) {
-        addressErrorMsg.innerText = "Veuillez remplir ce champ"
-        removeErrorMsgEmptyField(addressInput, addressErrorMsg)
-    }
-    if (cityInput.value.length == 0) {
-        cityMsg.innerText = "Veuillez remplir ce champ"
-        removeErrorMsgEmptyField(cityInput, cityMsg)
-    }
-    if (emailInput.value.length == 0) {
-        emailErrorMsg.innerText = "Veuillez remplir ce champ"
-    }
-    // else if (!emailInput.value.includes('@') || !emailInput.value.includes('.')) {
-    //     emailErrorMsg.innerText = "Merci d'entrer une adresse email valide"
-    //     e.preventDefault()
-    // }
-}
-
 // fonction qui retire le message d'erreur lorsqu'un champ est rempli
 function removeErrorMsgEmptyField(input, textSelector) {
     input.addEventListener('input', function (e) {
@@ -359,9 +324,6 @@ orderForm.addEventListener('submit', function (e) {
     if (cartStorage.length === 0) { // empêche l'envoi de la commande si le panier est vide
         okToSend = false
     }
-    // if (okToSend == false) {
-    //     e.preventDefault()
-    // }
     else if (okToSend == true) { // permet l'envoi de la commande si le formulaire est bien rempli
         send()
     }
