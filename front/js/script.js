@@ -3,6 +3,12 @@ fetch("http://localhost:3000/api/products") // appelle l'API
         if (response.ok) {
             return response.json(); // si la requête s'est bien passée, retourne le résultat de la requête au format .json
         }
+        else { // affiche un texte d'erreur au cas où la requête n'a pas eu de réponse positive
+            let itemsSection = document.getElementById("items")
+            let newParagraph = document.createElement('p')
+            itemsSection.appendChild(newParagraph)
+            newParagraph.textContent = "Erreur lors de la récupération des données. Veuillez contacter l'administrateur du site."
+        }
     })
     .then(function (product) {
 

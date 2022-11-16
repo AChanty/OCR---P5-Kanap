@@ -245,7 +245,7 @@ let cityMsg = document.getElementById("cityErrorMsg")
 let emailInput = document.getElementById("email")
 let emailErrorMsg = document.getElementById("emailErrorMsg")
 
-// message d'erreur si le champ email ne contient ni "@" ni "."
+// message d'erreur si le champ email n'est pas dans un format valable
 emailInput.addEventListener('input', function (e) {
     let value = e.target.value
     let regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
