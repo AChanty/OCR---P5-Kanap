@@ -193,7 +193,7 @@ function displayProduct(id, name, color, price, amount, imageUrl, altTxt) {
     contentSettingsDeleteItem.addEventListener('click', function () {
         newArticle.remove() // supprime l'élément du DOM
         cartItemsCalculation() // recalcule le total d'articles dans le panier
-        deleteArticle(id, color) // supprime l'article dans le localstorage "cart" et "products"
+        deleteArticle(id, color) // supprime l'article dans le localstorage "cart"
         printTotalPrice() // affiche le nouveau prix total du panier
     })
 } // fin fonction displayProduct
@@ -210,23 +210,23 @@ function deleteArticle(id, color) {
 }
 
 // fonction qui récupère les id des produits et les réunit dans le localstorage sous la key "products"
-function getIds() {
-    let idList = []
+// function getIds() {
+//     let idList = []
 
-    for (i = 0; i < cartStorage.length; i++) { // parcourt chaque article du cartStorage (key "cart" du localstorage), puis récupère/push l'élément "id" de chaque article dans l'array idList
-        idList.push(cartStorage[i].id)
-    }
+//     for (i = 0; i < cartStorage.length; i++) { // parcourt chaque article du cartStorage (key "cart" du localstorage), puis récupère/push l'élément "id" de chaque article dans l'array idList
+//         idList.push(cartStorage[i].id)
+//     }
 
-    // push l'array idList dans le localstorage en tant que key "products"
-    let idListStorage = JSON.stringify(idList)
-    localStorage.setItem("products", idListStorage)
-}
+//     // push l'array idList dans le localstorage en tant que key "products"
+//     let idListStorage = JSON.stringify(idList)
+//     localStorage.setItem("products", idListStorage)
+// }
 
 
 // -------------------------------------------------------------------
 // --------------------- Formulaire de commmande ---------------------
 
-let contactArray = []
+// let contactArray = []
 
 let firstNameInput = document.getElementById("firstName")
 let firstNameErrorMsg = document.getElementById("firstNameErrorMsg")
@@ -248,7 +248,8 @@ let emailErrorMsg = document.getElementById("emailErrorMsg")
 // message d'erreur si le champ email ne contient ni "@" ni "."
 emailInput.addEventListener('input', function (e) {
     let value = e.target.value
-    if (!value.includes('@') || !value.includes('.')) {
+    let regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+    if (!regex.test(value)) {
         emailErrorMsg.innerText = "Champ non valide"
     } else {
         emailErrorMsg.innerText = ""
@@ -286,6 +287,8 @@ orderForm.addEventListener('submit', function (e) {
     let cartStorageLecture = localStorage.getItem("cart")
     let cartStorage = JSON.parse(cartStorageLecture)
     let okToSend = true
+
+    let regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
     // mise en place de conditions qui empêche l'envoi de la commande si le formulaire n'est pas bien rempli
     if (firstNameInput.value.length == 0) {
         firstNameErrorMsg.innerText = "Veuillez remplir ce champ"
@@ -317,14 +320,14 @@ orderForm.addEventListener('submit', function (e) {
         emailErrorMsg.innerText = "Veuillez remplir ce champ"
         okToSend = false
     }
-    else if (!emailInput.value.includes('@') || !emailInput.value.includes('.')) {
+    else if (!regex.test(emailInput.value)) {
         emailErrorMsg.innerText = "Merci d'entrer une adresse email valide"
         okToSend = false
     }
     if (cartStorage.length === 0) { // empêche l'envoi de la commande si le panier est vide
         okToSend = false
     }
-    else if (okToSend == true) { // permet l'envoi de la commande si le formulaire est bien rempli
+    else if (okToSend) { // permet l'envoi de la commande si le formulaire est bien rempli
         send()
     }
 })
